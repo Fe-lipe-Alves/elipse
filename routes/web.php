@@ -23,13 +23,14 @@ Route::resourceVerbs([
 ]);
 
 Route::get('login', [AuthController::class, 'login'])->name('login');
+Route::post('authenticate', [AuthController::class, 'authenticate'])->name('authenticate');
 
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     Route::get('dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 
-    Route::get('/', [HomeController::class, 'dashboard'])->name('home');
+    Route::get('/', [HomeController::class, 'index'])->name('home');
 
     Route::resource('usuarios', UserController::class)
         ->parameters(['usuarios' => 'user'])

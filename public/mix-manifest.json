@@ -1,4 +1,9 @@
 {
     "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/css/style.css": "/css/style.css",
+    "/images/github.svg": "/images/github.svg",
+    "/images/google.svg": "/images/google.svg",
+    "/images/register_bg_2.png": "/images/register_bg_2.png",
+    "/images/team-1-800x800.jpg": "/images/team-1-800x800.jpg"
 }

@@ -9,23 +9,8 @@ use Inertia\Inertia;
 
 class HomeController extends Controller
 {
-    /**
-     * Retorna a tela inicial
-     *
-     * @return \Inertia\Response
-     */
     public function index()
     {
-        return Inertia::render('Index');
-    }
-
-    /**
-     * Retorna a tela de dashboard
-     *
-     * @return \Inertia\Response
-     */
-    public function dashboard()
-    {
-        return Inertia::render('admin/Dashboard');
+        return view('home');
     }
 }
