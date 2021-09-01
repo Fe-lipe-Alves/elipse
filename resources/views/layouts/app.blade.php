@@ -9,12 +9,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 {{--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css"/>--}}
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/creativetimofficial/tailwind-starter-kit/compiled-tailwind.min.css"
-    />
 </head>
-<body class="text-blueGray-700 antialiased">
+<body class="text-blueGray-700 bg-brand-light antialiased">
 <noscript>You need to enable JavaScript to run this app.</noscript>
 
 <div id="root">

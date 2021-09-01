@@ -133,7 +133,7 @@
             <ul class="md:flex-col md:min-w-full flex flex-col list-none">
                 <li class="items-center">
                     <a
-                        class="text-pink-500 hover:text-pink-600 text-xs uppercase py-3 font-bold block"
+                        class="text-primary-500 hover:text-primary-600 text-xs uppercase py-3 font-bold block"
                         href="#/dashboard"
                     ><i class="fas fa-tv opacity-75 mr-2 text-sm"></i>
                         Dashboard</a
