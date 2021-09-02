@@ -34,6 +34,9 @@ module.exports = {
             },
             ...colors
         },
+        fontFamily: {
+            sans: ['Nunito', 'sans-serif'],
+        },
         extend: {},
     },
     variants: {

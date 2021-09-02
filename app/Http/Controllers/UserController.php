@@ -15,7 +15,7 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
@@ -27,14 +27,15 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Inertia\Response
+     * @return
      */
     public function create()
     {
         if (Auth::user()->type_of_user_id !== 1 && Auth::user()->type_of_user_id !== 4) {
             abort(403);
         }
-        return Inertia::render('Auth/Register');
+
+        return view('users.form');
     }
 
     /**

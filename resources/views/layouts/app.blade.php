@@ -37,4 +37,8 @@
 ></script>
 <script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
 <script src="{{ asset('js/app.js') }}"></script>
+
+@isset($scripts)
+    {{ $scripts }}
+@endisset
 </html>
