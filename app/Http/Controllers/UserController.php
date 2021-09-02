@@ -21,9 +21,7 @@ class UserController extends Controller
     {
         $users = User::query()->with('typeOfUser')->get();
 
-        return Inertia::render('User/Index', [
-            'users' => $users,
-        ]);
+        return view('users.index', compact('users'));
     }
 
     /**

@@ -134,7 +134,7 @@
                 <li class="items-center">
                     <a
                         class="text-primary-500 hover:text-primary-600 text-xs uppercase py-3 font-bold block"
-                        href="#/dashboard"
+                        href="{{ route('home') }}"
                     ><i class="fas fa-tv opacity-75 mr-2 text-sm"></i>
                         Dashboard</a
                     >
@@ -148,7 +148,7 @@
                 Cadastros
             </h6>
             <ul class="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-                <x-layout.sidebar-item href="teste" name="Ola" icon="fa-user" />
+                <x-layout.sidebar-item href="{{ route('users.index') }}" name="Usuários" icon="fa-users" />
             </ul>
         </div>
     </div>
