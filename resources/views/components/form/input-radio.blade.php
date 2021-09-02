@@ -10,11 +10,7 @@
             {{ $attributes }}
         >
 
-        <label
-            class="block uppercase text-blueGray-600 text-xs font-bold mb-2
-                {{ $attributes->has('required') ? 'required' : '' }}"
-            for="{{ $id }}"
-        >
+        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" for="{{ $id }}">
             {{ $label }}
         </label>
 

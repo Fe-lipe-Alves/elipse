@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Fortify\CreateNewUser;
 use App\Models\User;
+use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,13 @@ use Inertia\Inertia;
 
 class UserController extends Controller
 {
+    public $repository;
+
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->repository = $userRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -49,9 +57,13 @@ class UserController extends Controller
         if (Auth::user()->type_of_user_id !== 1 && Auth::user()->type_of_user_id !== 4) {
             abort(403);
         }
-        (new CreateNewUser())->create($request->all());
+        $response = $this->repository->create($request->all());
 
-        return redirect()->route('users.index');
+        if ($response['success']) {
+            return redirect()->route('users.index');
+        }
+
+        return redirect()->back()->withErrors($response['errors']);
     }
 
     /**

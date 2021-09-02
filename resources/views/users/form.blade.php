@@ -22,10 +22,10 @@
 
             <div class="flex flex-wrap">
                 <div class="w-full lg:w-12/12 flex justify-center px-4">
-                    <x-form.input-radio name="type_of_user" id="tou_1" label="Aluno" value="1" width="w-2/12" />
-                    <x-form.input-radio name="type_of_user" id="tou_2" label="Professor" value="2" width="w-2/12" />
-                    <x-form.input-radio name="type_of_user" id="tou_3" label="Secretario" value="3" width="w-2/12" />
-                    <x-form.input-radio name="type_of_user" id="tou_4" label="Administrador" value="4" width="w-2/12" />
+                    <x-form.input-radio name="type_of_user_id" id="tou_1" label="Aluno" value="1" width="w-2/12" required />
+                    <x-form.input-radio name="type_of_user_id" id="tou_2" label="Professor" value="2" width="w-2/12" required />
+                    <x-form.input-radio name="type_of_user_id" id="tou_3" label="Secretario" value="3" width="w-2/12" required />
+                    <x-form.input-radio name="type_of_user_id" id="tou_4" label="Administrador" value="4" width="w-2/12" required />
 
                 </div>
             </div>
@@ -35,7 +35,7 @@
                     <x-form.input name="ra" id="ra" width="w-full" label="RA" required/>
                 </div>
                 <div id="input-cpf" class="w-full lg:w-4/12 hidden">
-                    <x-form.input name="cpf" id="cpf" width="w-full" label="CPF" required/>
+                    <x-form.input name="cpf" id="cpf" width="w-full" label="CPF"/>
                 </div>
             </div>
 

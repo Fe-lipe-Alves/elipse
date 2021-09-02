@@ -32,13 +32,6 @@ interface UserRepositoryInterface
      */
     public function newPassword(array $data): string;
 
-    /**
-     * Identificar tipo de usuário
-     *
-     * @param $userType
-     * @return int|null
-     */
-    public function typeOfUser($userType): ?int;
 
     /**
      * Obter lista de usuários ativo

@@ -18,7 +18,6 @@ use Illuminate\Validation\Rule;
 class UserRepository implements UserRepositoryInterface
 {
     use HasModel;
-    use PasswordValidationRules;
 
     private $modelClass = User::class;
 
@@ -33,28 +32,18 @@ class UserRepository implements UserRepositoryInterface
         $password = $this->newPassword(Arr::only($input, ['birth_date', 'cpf', 'ra']));
         $input = Arr::add($input, 'password', $password);
         $input = Arr::add($input, 'password_confirmation', $password);
-        $input = Arr::add($input, 'type_of_user_id', $this->typeOfUser($input['userType']));
 
-        $validator = Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => $this->passwordRules(),
-            'birth_date' => ['required'],
-            'phone' => ['required'],
-            'ra' => [
-                Rule::requiredIf($input['userType'] == 'user_type_student')
-            ],
-            'cpf' => [
-                Rule::requiredIf($input['userType'] != 'user_type_student')
-            ],
-        ]);
+        $validator = $this->validate($input);
 
 
         if ($validator->fails()) {
-            return null;
+            return [
+                'success' => false,
+                'errors' => $validator->errors()
+            ];
         }
 
-        $user = User::create([
+        $user = User::query()->create([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
@@ -65,7 +54,46 @@ class UserRepository implements UserRepositoryInterface
             'cpf' => $input['cpf'] ?? null,
         ]);
 
-        return $user;
+        return [
+            'success' => true,
+            'user' => $user,
+        ];
+    }
+
+    /**
+     * Aplica validações nos valores recebidos
+     *
+     * @param array $input
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function validate(array $input)
+    {
+        return Validator::make(
+            $input,
+            [
+                'name'            => ['required', 'max:255'],
+                'email'           => ['required', 'email', 'max:255', 'unique:users'],
+                'password'        => ['required'],
+                'birth_date'      => ['required'],
+                'phone'           => ['required'],
+                'type_of_user_id' => ['required', Rule::in([1, 2, 3, 4])],
+                'ra'              => [ Rule::requiredIf($input['type_of_user_id'] == 1) ],
+                'cpf'             => [ Rule::requiredIf($input['type_of_user_id'] != 1) ],
+            ],
+            [
+                'name.required' => 'Nomé é obrigatório',
+                'name.max' => 'Tamanho máximo de 255 caracteres',
+                'email.required' => 'E-mail é obrigatório',
+                'email.max' => 'Tamanho máximo de 255 caracteres',
+                'email.unique' => 'Este email já está cadastrado',
+                'password.required' => 'Senha é obrigatório',
+                'birth_date.required' => 'Data de nascimento é obrigatório',
+                'phone.required' => 'Telefone é obrigatório',
+                'type_of_user_id.required' => 'Tipo de usuário é obrigatório',
+                'ra.required_if' => 'RA é obrigatório',
+                'cpf.required_if' => 'CPF é obrigatório',
+            ]
+        );
     }
 
     /**
@@ -129,26 +157,6 @@ class UserRepository implements UserRepositoryInterface
         return Str::substr($doc, 0, 4) . Str::substr($data['birth_date'], 0, 4);
     }
 
-    /**
-     * Identificar tipo de usuário
-     *
-     * @param $userType
-     * @return int|null
-     */
-    public function typeOfUser($userType): ?int
-    {
-        switch ($userType) {
-            case 'user_type_admin' :
-                return 1;
-            case 'user_type_student' :
-                return 2;
-            case 'user_type_teacher' :
-                return 3;
-            case 'user_type_secretary' :
-                return 4;
-        }
-        return null;
-    }
 
     /**
      * Obter lista de usuários ativo

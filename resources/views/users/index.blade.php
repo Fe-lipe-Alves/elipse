@@ -61,7 +61,7 @@
                                 {{ $user->phone }}
                             </td>
                             <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                {{ $user->birth_date }}
+                                {{ !$user->birth_date ? '' : \Carbon\Carbon::make($user->birth_date)->format('d/m/Y') }}
                             </td>
                             <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                 {{ $user->typeOfUser->description }}
