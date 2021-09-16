@@ -2,8 +2,7 @@
 
     <x-layout.card-page title="Cadastrar novo usuário">
 
-        <x-form.form action="{{ route('users.store') }}">
-
+        <x-form.form action="{{ route('users.store') }}" :model="$user">
             <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">Informações do usuário</h6>
 
             <div class="flex flex-wrap">

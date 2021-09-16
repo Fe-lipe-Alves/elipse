@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Fortify\CreateNewUser;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\MessageBag;
-use Inertia\Inertia;
 
 class UserController extends Controller
 {
@@ -80,15 +78,16 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Inertia\Response
+     * @param User $user
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function edit(User $user)
     {
         if (Auth::user()->type_of_user_id !== 1 && Auth::user()->type_of_user_id !== 4) {
             abort(403);
         }
-        return Inertia::render('Auth/Register', ['user_t' => $user]);
+
+        return view('users.form', compact('user'));
     }
 
     /**
@@ -119,6 +118,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        dd($user);
+
         if (Auth::user()->type_of_user_id !== 1 && Auth::user()->type_of_user_id !== 4) {
             abort(403);
         }

@@ -7,6 +7,7 @@
                name="{{ $name }}"
                id="{{ $id }}"
                value="{{ $value }}"
+            {{ $attributes->merge(['checked' => $checked]) }}
             {{ $attributes }}
         >
 
