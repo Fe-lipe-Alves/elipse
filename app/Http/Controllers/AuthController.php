@@ -30,11 +30,17 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->remember_me)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('home');
+            return redirect()->route('home');
         }
 
         return back()->withErrors([
             'email' => 'Email ou senhas inválidos.',
         ]);
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('login');
     }
 }

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <meta name="theme-color" content="#000000" />
-    <title>Login | Tailwind Starter Kit by Creative Tim</title>
+    <title>{{ config('app.name') }}</title>
 </head>
 <body class="text-gray-800 antialiased">
 

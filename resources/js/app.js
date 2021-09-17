@@ -45,4 +45,8 @@ $(document).ready(function () {
             closeDropdown(event, item)
         })
     })
+
+    $('#userHeaderBox #logout').on('click', function () {
+        $('#formLogout').submit();
+    })
 })

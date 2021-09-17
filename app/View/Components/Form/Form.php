@@ -30,7 +30,7 @@ class Form extends Component
         Session::forget('formModel');
     }
 
-    public function storageModel(Model $model)
+    public function storageModel(?Model $model)
     {
         if (!is_null($model)) {
             Session::flash('formModel', $model);

@@ -52,6 +52,9 @@ jquery_src_jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).ready(functio
       closeDropdown(event, item);
     });
   });
+  jquery_src_jquery__WEBPACK_IMPORTED_MODULE_0___default()('#userHeaderBox #logout').on('click', function () {
+    jquery_src_jquery__WEBPACK_IMPORTED_MODULE_0___default()('#formLogout').submit();
+  });
 });
 
 /***/ }),
