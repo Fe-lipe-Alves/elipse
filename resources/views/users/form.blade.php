@@ -2,7 +2,12 @@
 
     <x-layout.card-page title="Cadastrar novo usuário">
 
-        <x-form.form action="{{ route('users.store') }}" :model="$user">
+        @php
+            $user = $user ?? null;
+            $route = $user ?  route('users.update', ['user' => $user->id]) : route('users.store');
+        @endphp
+
+        <x-form.form action="{{ $route }}" :model="$user">
             <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">Informações do usuário</h6>
 
             <div class="flex flex-wrap">
@@ -21,19 +26,27 @@
 
             <div class="flex flex-wrap">
                 <div class="w-full lg:w-12/12 flex justify-center px-4">
-                    <x-form.input-radio name="type_of_user_id" id="tou_1" label="Aluno" value="1" width="w-2/12" required />
-                    <x-form.input-radio name="type_of_user_id" id="tou_2" label="Professor" value="2" width="w-2/12" required />
-                    <x-form.input-radio name="type_of_user_id" id="tou_3" label="Secretario" value="3" width="w-2/12" required />
-                    <x-form.input-radio name="type_of_user_id" id="tou_4" label="Administrador" value="4" width="w-2/12" required />
+                    <x-form.input-radio name="type_of_user_id" id="tou_1" label="Aluno" value="2" width="w-2/12" required />
+                    <x-form.input-radio name="type_of_user_id" id="tou_2" label="Professor" value="3" width="w-2/12" required />
+                    <x-form.input-radio name="type_of_user_id" id="tou_3" label="Secretario" value="4" width="w-2/12" required />
+                    <x-form.input-radio name="type_of_user_id" id="tou_4" label="Administrador" value="1" width="w-2/12" required />
 
                 </div>
             </div>
 
             <div class="flex flex-wrap">
-                <div id="input-ra" class="w-full lg:w-4/12">
+                <div id="input-ra" @class([
+                    'w-full',
+                    'lg:w-4/12',
+                    'hidden' => (!is_null($user)) && $user->type_of_user_id !== 2
+                ])>
                     <x-form.input name="ra" id="ra" width="w-full" label="RA" required/>
                 </div>
-                <div id="input-cpf" class="w-full lg:w-4/12 hidden">
+                <div id="input-cpf" @class([
+                    'w-full',
+                    'lg:w-4/12',
+                    'hidden' =>(!is_null($user)) && $user->type_of_user_id == 2
+                ])>
                     <x-form.input name="cpf" id="cpf" width="w-full" label="CPF"/>
                 </div>
             </div>
