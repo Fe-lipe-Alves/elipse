@@ -4,11 +4,9 @@
 namespace App\Repositories;
 
 
-use App\Actions\Fortify\PasswordValidationRules;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Support\Traits\HasModel;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -22,19 +20,15 @@ class UserRepository implements UserRepositoryInterface
     private $modelClass = User::class;
 
     /**
-     * Validar e cadastrar novo usuário
+     * Valida e salva o registro no banco
      *
-     * @param array $input
-     * @return null
+     * @param array $data
+     * @param User|null $user
+     * @return array
      */
-    public function create(array $input)
+    public function store(array $data, User $user = null): array
     {
-        $password = $this->newPassword(Arr::only($input, ['birth_date', 'cpf', 'ra']));
-        $input = Arr::add($input, 'password', $password);
-        $input = Arr::add($input, 'password_confirmation', $password);
-
-        $validator = $this->validate($input);
-
+        $validator = $this->validate($data, $user);
 
         if ($validator->fails()) {
             return [
@@ -43,16 +37,26 @@ class UserRepository implements UserRepositoryInterface
             ];
         }
 
-        $user = User::query()->create([
-            'name' => $input['name'],
-            'email' => $input['email'],
-            'password' => Hash::make($input['password']),
-            'birth_date' => $input['birth_date'],
-            'phone' => $input['phone'],
-            'type_of_user_id' => $input['type_of_user_id'],
-            'ra' => $input['ra'] ?? null,
-            'cpf' => $input['cpf'] ?? null,
-        ]);
+        $attributes = [
+            'name'            => $data['name'],
+            'email'           => $data['email'],
+            'birth_date'      => $data['birth_date'],
+            'phone'           => $data['phone'],
+            'type_of_user_id' => $data['type_of_user_id'],
+            'ra'              => $data['ra'] ?? null,
+            'cpf'             => $data['cpf'] ?? null,
+        ];
+
+        if (is_null($user)) {
+            $user = new User();
+
+            $document = $data['cpf'] ?? $data['ra'];
+            $password = $this->newPassword($document, $data['birth_date']);
+
+            $attributes['password'] = Hash::make($password);
+        }
+
+        $user->fill($attributes)->save();
 
         return [
             'success' => true,
@@ -64,97 +68,56 @@ class UserRepository implements UserRepositoryInterface
      * Aplica validações nos valores recebidos
      *
      * @param array $input
+     * @param User|null $user
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validate(array $input)
+    public function validate(array $input, User $user = null)
     {
         return Validator::make(
             $input,
             [
                 'name'            => ['required', 'max:255'],
-                'email'           => ['required', 'email', 'max:255', 'unique:users'],
-                'password'        => ['required'],
+                'email'           => [
+                    'required',
+                    'email',
+                    'max:255',
+                    Rule::unique('users', 'email')->ignoreModel($user)
+                ],
                 'birth_date'      => ['required'],
                 'phone'           => ['required'],
                 'type_of_user_id' => ['required', Rule::in([1, 2, 3, 4])],
-                'ra'              => [ Rule::requiredIf($input['type_of_user_id'] == 1) ],
-                'cpf'             => [ Rule::requiredIf($input['type_of_user_id'] != 1) ],
+                'ra'              => [
+                    Rule::requiredIf($input['type_of_user_id'] == 1)
+                ],
+                'cpf'             => [
+                    Rule::requiredIf($input['type_of_user_id'] != 1)
+                ],
             ],
             [
-                'name.required' => 'Nomé é obrigatório',
-                'name.max' => 'Tamanho máximo de 255 caracteres',
-                'email.required' => 'E-mail é obrigatório',
-                'email.max' => 'Tamanho máximo de 255 caracteres',
-                'email.unique' => 'Este email já está cadastrado',
-                'password.required' => 'Senha é obrigatório',
-                'birth_date.required' => 'Data de nascimento é obrigatório',
-                'phone.required' => 'Telefone é obrigatório',
+                'name.required'            => 'Nomé é obrigatório',
+                'name.max'                 => 'Tamanho máximo de 255 caracteres',
+                'email.required'           => 'E-mail é obrigatório',
+                'email.max'                => 'Tamanho máximo de 255 caracteres',
+                'email.unique'             => 'Este email já está cadastrado',
+                'birth_date.required'      => 'Data de nascimento é obrigatório',
+                'phone.required'           => 'Telefone é obrigatório',
                 'type_of_user_id.required' => 'Tipo de usuário é obrigatório',
-                'ra.required_if' => 'RA é obrigatório',
-                'cpf.required_if' => 'CPF é obrigatório',
+                'ra.required_if'           => 'RA é obrigatório',
+                'cpf.required_if'          => 'CPF é obrigatório',
             ]
         );
     }
 
     /**
-     * Validar e salvar usuário
-     *
-     * @param User $user
-     * @param array $input
-     * @return User|\Illuminate\Support\MessageBag
-     */
-    public function update(User $user, array $input)
-    {
-        $input = Arr::add($input, 'type_of_user_id', $this->typeOfUser($input['userType']));
-
-        $validator = Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => [
-                'required',
-                'string',
-                'email',
-                'max:255',
-                Rule::unique('users')->ignore($user->id)
-            ],
-            'birth_date' => ['required'],
-            'phone' => ['required'],
-            'ra' => [
-                Rule::requiredIf($input['userType'] == 'user_type_student')
-            ],
-            'cpf' => [
-                Rule::requiredIf($input['userType'] != 'user_type_student')
-            ],
-        ]);
-
-
-        if ($validator->fails()) {
-            return $validator->errors();
-        }
-
-        $user->fill([
-            'name' => $input['name'],
-            'email' => $input['email'],
-            'birth_date' => $input['birth_date'],
-            'phone' => $input['phone'],
-            'type_of_user_id' => $input['type_of_user_id'],
-            'ra' => $input['ra'] ?? null,
-            'cpf' => $input['cpf'] ?? null,
-        ]);
-        $user->save();
-
-        return $user;
-    }
-
-    /**
      * Gerar senha para usuário
      *
-     * @param array $data
+     * @param string $document
+     * @param string $birth_date
      * @return string
      */
-    public function newPassword(array $data): string
+    public function newPassword(string $document, string $birth_date): string
     {
-        $doc = $data['cpf'] ?? $data['ra'];
-        return Str::substr($doc, 0, 4) . Str::substr($data['birth_date'], 0, 4);
+        return Str::substr($document, 0, 4) . Str::substr($birth_date, 0, 4);
     }
 
 

@@ -8,29 +8,31 @@ use App\Models\User;
 interface UserRepositoryInterface
 {
     /**
-     * Validar e cadastrar novo usuário
+     * Valida e salva o registro no banco
      *
-     * @param array $input
-     * @return null
+     * @param array $data
+     * @param User|null $user
+     * @return array
      */
-    public function create(array $input);
+    public function store(array $data, User $user = null): array;
 
     /**
-     * Validar e salvar usuário
+     * Aplica validações nos valores recebidos
      *
-     * @param User $user
      * @param array $input
-     * @return User|\Illuminate\Support\MessageBag
+     * @param User|null $user
+     * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function update(User $user, array $input);
+    public function validate(array $input, User $user = null);
 
     /**
      * Gerar senha para usuário
      *
-     * @param array $data
+     * @param string $document
+     * @param string $birth_date
      * @return string
      */
-    public function newPassword(array $data): string;
+    public function newPassword(string $document, string $birth_date): string;
 
 
     /**

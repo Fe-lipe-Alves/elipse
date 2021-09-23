@@ -55,7 +55,8 @@ class UserController extends Controller
         if (Auth::user()->type_of_user_id !== 1 && Auth::user()->type_of_user_id !== 4) {
             abort(403);
         }
-        $response = $this->repository->create($request->all());
+
+        $response = $this->repository->store($request->all());
 
         if ($response['success']) {
             return redirect()->route('users.index');
@@ -93,8 +94,8 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param User $user
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, User $user)
@@ -103,11 +104,13 @@ class UserController extends Controller
             abort(403);
         }
 
-        $save = (new UserRepository())->update($user, $request->all());
-        if ($save instanceof MessageBag) {
-            dd($save);
+        $response = $this->repository->store($request->all(), $user);
+
+        if ($response['success']) {
+            return redirect()->route('users.index');
         }
-        return redirect()->route('users.index');
+
+        return redirect()->back()->withErrors($response['errors']);
     }
 
     /**
