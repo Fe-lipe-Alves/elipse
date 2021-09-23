@@ -21,6 +21,7 @@ class Form extends Component
     {
         $this->action = $action;
         $this->method = $method;
+        $this->model = $model;
 
         $this->storageModel($model);
     }
