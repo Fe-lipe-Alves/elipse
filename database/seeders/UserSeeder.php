@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
     {
         $attributes = [
             'name' => 'Administrador',
-                'email' => 'administrador@elipse.com',
+            'email' => 'administrador@elipse.com',
             'password' => Hash::make('123456'),
             'type_of_user_id' => 1
         ];

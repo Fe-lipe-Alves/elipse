@@ -67,7 +67,7 @@
                                 {{ $user->typeOfUser->description }}
                             </td>
                             <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                {{ $user->type_of_user_id == 1 ? $user->cpf : $user->ra }}
+                                {{ $user->type_of_user_id == 2 ? $user->ra : $user->cpf }}
                             </td>
                             <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                 <x-layout.dropdown

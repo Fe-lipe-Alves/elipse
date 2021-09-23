@@ -1,7 +1,8 @@
 $(document).ready(function() {
 
     $('input[name="type_of_user_id"]').on('change', function() {
-        if ($(this).val() === '1') {
+        let studentID = '2';
+        if ($(this).val() === studentID) {
             $('#input-ra').removeClass('hidden').find('input').prop('required', true)
             $('#input-cpf').addClass('hidden').find('input').prop('required', false)
         } else {
