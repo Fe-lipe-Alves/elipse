@@ -151,6 +151,7 @@
                 <x-layout.sidebar-item href="{{ route('users.index') }}" name="Usuários" icon="fa-users" />
                 <x-layout.sidebar-item href="{{ route('works.index') }}" name="Trabalhos" icon="fa-microscope" />
                 <x-layout.sidebar-item href="{{ route('subjects.index') }}" name="Disciplinas" icon="fa-shapes" />
+                <x-layout.sidebar-item href="{{ route('lessons.index') }}" name="Aulas" icon="fa-book" />
             </ul>
         </div>
     </div>
