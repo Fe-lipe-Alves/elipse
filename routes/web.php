@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\StudentsClassController;
+use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkController;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::resource('trabalhos', WorkController::class)
         ->parameters(['trabalhos' => 'work'])
         ->names('works');
+
+    Route::resource('disciplinas', SubjectController::class)
+        ->parameters(['disciplinas' => 'subject'])
+        ->names('subjects');
 
 });
 //Route::get('checkName', [StudentsClassController::class, 'checkName'])->name('checkName');

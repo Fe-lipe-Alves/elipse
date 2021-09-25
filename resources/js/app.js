@@ -49,4 +49,12 @@ $(document).ready(function () {
     $('#userHeaderBox #logout').on('click', function () {
         $('#formLogout').submit();
     })
+
+    $('[data-action="destroy"]').on('click', function () {
+        let formGeneric = $('#formGeneric')
+
+        formGeneric.find('input[name="_method"]').val('delete')
+        formGeneric.attr('action', $(this).data('route'))
+        formGeneric.submit()
+    })
 })

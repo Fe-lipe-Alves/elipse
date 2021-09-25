@@ -12,12 +12,5 @@
     id="order_dropdown_{{ $order }}"
     data-interaction="dropdown"
 >
-    @foreach($list as $label => $link)
-    <a
-        href="{{ $link }}"
-        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-    >
-        {{ $label }}
-    </a>
-    @endforeach
+    {{ $slot }}
 </div>

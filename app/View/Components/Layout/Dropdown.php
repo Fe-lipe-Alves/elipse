@@ -7,7 +7,6 @@ use Illuminate\View\Component;
 
 class Dropdown extends Component
 {
-    public $list;
     public $ref;
     public $order;
 
@@ -16,9 +15,8 @@ class Dropdown extends Component
      *
      * @return void
      */
-    public function __construct($list, $ref)
+    public function __construct($ref)
     {
-        $this->list = $list;
         $this->ref = $ref;
 
         $this->getOrder();
