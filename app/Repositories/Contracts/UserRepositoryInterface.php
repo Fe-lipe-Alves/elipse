@@ -42,4 +42,11 @@ interface UserRepositoryInterface
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
     public function getActiveUser($type_of_users = null);
+
+    /**
+     * Obtém uma lista de todos os usuários professores
+     *
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getTechers();
 }
