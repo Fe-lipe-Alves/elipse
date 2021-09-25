@@ -149,6 +149,7 @@
             </h6>
             <ul class="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
                 <x-layout.sidebar-item href="{{ route('users.index') }}" name="Usuários" icon="fa-users" />
+                <x-layout.sidebar-item href="{{ route('works.index') }}" name="Trabalhos" icon="fa-microscope" />
             </ul>
         </div>
     </div>
