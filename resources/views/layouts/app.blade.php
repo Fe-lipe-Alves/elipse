@@ -28,6 +28,11 @@
 
 
     </div>
+
+    <form action="" method="post" id="formGeneric" class="hidden">
+        @csrf
+        @method('post')
+    </form>
 </div>
 
 </body>

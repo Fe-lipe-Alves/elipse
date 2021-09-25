@@ -55,6 +55,12 @@ jquery_src_jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).ready(functio
   jquery_src_jquery__WEBPACK_IMPORTED_MODULE_0___default()('#userHeaderBox #logout').on('click', function () {
     jquery_src_jquery__WEBPACK_IMPORTED_MODULE_0___default()('#formLogout').submit();
   });
+  jquery_src_jquery__WEBPACK_IMPORTED_MODULE_0___default()('[data-action="destroy"]').on('click', function () {
+    var formGeneric = jquery_src_jquery__WEBPACK_IMPORTED_MODULE_0___default()('#formGeneric');
+    formGeneric.find('input[name="_method"]').val('delete');
+    formGeneric.attr('action', jquery_src_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('route'));
+    formGeneric.submit();
+  });
 });
 
 /***/ }),
