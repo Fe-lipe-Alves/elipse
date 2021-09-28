@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Work;
+use App\Repositories\Contracts\LessonRepositoryInterface;
+use App\Repositories\Contracts\StudentsClassInterface;
 use App\Repositories\Contracts\WorkRepositoryInterface;
 use App\Support\Consts\TypeOfUsers;
 use Illuminate\Http\Request;
@@ -20,23 +22,27 @@ class WorkController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
-//        $works = $this->repository->getWorks();
+        $works = $this->repository->getWorks();
 
-        return view('works.index');
+        return view('works.index', compact('works'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function create()
     {
-        //
+        /** @var StudentsClassInterface $students_class_repository */
+        $students_class_repository = app(StudentsClassInterface::class);
+        $studentsClasses = $students_class_repository->getAll();
+
+        return view('works.form', compact('studentsClasses'));
     }
 
     /**
