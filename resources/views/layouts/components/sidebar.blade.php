@@ -149,9 +149,20 @@
             </h6>
             <ul class="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
                 <x-layout.sidebar-item href="{{ route('users.index') }}" name="Usuários" icon="fa-users" />
-                <x-layout.sidebar-item href="{{ route('works.index') }}" name="Trabalhos" icon="fa-microscope" />
                 <x-layout.sidebar-item href="{{ route('subjects.index') }}" name="Disciplinas" icon="fa-shapes" />
                 <x-layout.sidebar-item href="{{ route('lessons.index') }}" name="Aulas" icon="fa-book" />
+            </ul>
+
+
+            <hr class="my-4 md:min-w-full"/>
+
+            <h6
+                class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
+            >
+                Acadêmico
+            </h6>
+            <ul class="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
+                <x-layout.sidebar-item href="{{ route('works.index') }}" name="Trabalhos" icon="fa-microscope" />
             </ul>
         </div>
     </div>
