@@ -54,7 +54,7 @@
                             @for($i = 1; $i <= 6; $i++)
                                 <tr>
                                     @for($j = 1; $j <= 5; $j++)
-                                        @php($checked = in_array(($i.'-'.$j), $schedules))
+                                        @php($checked = isset($schedules) ? in_array(($i.'-'.$j), $schedules) : false)
                                         <td
                                             data-selected="false"
                                             class="class_schedule-item text-center border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 {{ $checked ? 'bg-indigo-300 hover:bg-indigo-200' : 'hover:bg-indigo-100' }}"
