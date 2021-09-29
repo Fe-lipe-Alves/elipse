@@ -15,7 +15,7 @@ class CreateWorksTable extends Migration
     {
         Schema::create('works', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('class_id')->constrained('classes');
+            $table->foreignId('lesson_id')->constrained('lessons');
             $table->string('title');
             $table->text('description');
             $table->timestamp('deadline');
