@@ -197,4 +197,9 @@ class StudentsClassController extends Controller
             ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
             ->json(['exists'=> false]);
     }
+
+    public function teachers(StudentsClass $studentsClass)
+    {
+        $studentsClass->teachers();
+    }
 }

@@ -19,6 +19,12 @@ class StudentsClass extends Model
         'active',
     ];
 
+    public function getDescriptionAttribute($value)
+    {
+        $gradeType = $this->grade()->with('gradeType')->first()->gradeType->description;
+        return $this->grade_id . 'ª ' . $this->name . ' - '. $gradeType ;
+    }
+
     /**
      * Obtém a séria da classe
      *
@@ -29,6 +35,11 @@ class StudentsClass extends Model
         return $this->belongsTo(Grade::class);
     }
 
+    /**
+     * Obtém a lista de alunos da classe
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function students()
     {
         return $this->belongsToMany(
@@ -37,5 +48,10 @@ class StudentsClass extends Model
             'students_class_id',
             'student_id',
         );
+    }
+
+    public function teachers()
+    {
+        return $this->hasManyThrough(User::class, Lesson::class, 'id', 'students_class_id');
     }
 }

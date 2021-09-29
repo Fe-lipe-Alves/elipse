@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LessonController;
 use App\Http\Controllers\StudentsClassController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
@@ -43,6 +44,9 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         ->parameters(['turmas' => 'studentsClass'])
         ->names('students_class');
 
+    Route::get('turmas/{studentsClass}/professores', [StudentsClassController::class, 'teachers'])
+        ->name('students_class.teachers');
+
     Route::resource('trabalhos', WorkController::class)
         ->parameters(['trabalhos' => 'work'])
         ->names('works');
@@ -50,6 +54,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::resource('disciplinas', SubjectController::class)
         ->parameters(['disciplinas' => 'subject'])
         ->names('subjects');
+
+    Route::resource('aulas', LessonController::class)
+        ->parameters(['aulas' => 'lesson'])
+        ->names('lessons');
 
 });
 //Route::get('checkName', [StudentsClassController::class, 'checkName'])->name('checkName');

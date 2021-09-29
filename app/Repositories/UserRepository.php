@@ -6,6 +6,7 @@ namespace App\Repositories;
 
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Support\Consts\TypeOfUsers;
 use App\Support\Traits\HasModel;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -136,5 +137,15 @@ class UserRepository implements UserRepositoryInterface
         }
 
         return $users->get();
+    }
+
+    /**
+     * Obtém uma lista de todos os usuários professores
+     *
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getTechers()
+    {
+        return User::query()->where('type_of_user_id', TypeOfUsers::TEACHER)->get();
     }
 }

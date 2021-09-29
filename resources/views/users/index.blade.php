@@ -70,13 +70,19 @@
                                 {{ $user->type_of_user_id == 2 ? $user->ra : $user->cpf }}
                             </td>
                             <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                <x-layout.dropdown
-                                    :list="[
-                                        'Editar' => route('users.edit', ['user' => $user->id]),
-                                        'Apagar' => route('users.destroy', ['user' => $user->id]),
-                                    ]"
-                                    :ref="$user->id"
-                                />
+                                <x-layout.dropdown :ref="$user->id" >
+                                    <x-layout.dropdown-item
+                                        :label="'Editar'"
+                                        :href="route('users.edit', ['user' => $user->id])"
+                                    />
+
+                                    <x-layout.dropdown-item
+                                        :label="'Apagar'"
+                                        data-action="destroy"
+                                        :data-route="route('users.destroy', ['user' => $user->id])"
+                                    />
+
+                                </x-layout.dropdown>
                             </td>
                         </tr>
                     @endforeach
