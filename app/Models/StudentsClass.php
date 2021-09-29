@@ -49,4 +49,9 @@ class StudentsClass extends Model
             'student_id',
         );
     }
+
+    public function teachers()
+    {
+        return $this->hasManyThrough(User::class, Lesson::class, 'id', 'students_class_id');
+    }
 }

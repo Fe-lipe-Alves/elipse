@@ -44,6 +44,9 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         ->parameters(['turmas' => 'studentsClass'])
         ->names('students_class');
 
+    Route::get('turmas/{studentsClass}/professores', [StudentsClassController::class, 'teachers'])
+        ->name('students_class.teachers');
+
     Route::resource('trabalhos', WorkController::class)
         ->parameters(['trabalhos' => 'work'])
         ->names('works');
