@@ -37,7 +37,12 @@ module.exports = {
         fontFamily: {
             sans: ['Nunito', 'sans-serif'],
         },
-        extend: {},
+        extend: {
+            width: {
+                '0.5/12': '4.166666%',
+                '5.5/12': '45.833332%',
+            }
+        },
     },
     variants: {
         extend: {},

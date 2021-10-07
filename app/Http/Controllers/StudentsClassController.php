@@ -6,7 +6,9 @@ use App\Models\StudentsClass;
 use App\Repositories\Contracts\GradeRepositoryInterface;
 use App\Repositories\Contracts\GradeTypeRepositoryInterface;
 use App\Repositories\Contracts\StudentsClassInterface;
+use App\Repositories\Contracts\SubjectRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Support\Consts\TypeOfUsers;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
@@ -26,29 +28,31 @@ class StudentsClassController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
         $studentsClass = $this->repository->getAll();
 
-        return Inertia::render('StudentsClass/Index', [
-            'studentsClass' => $studentsClass
-        ]);
+        return view('students-classes.index', compact('studentsClass'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Inertia\Response
+     * @return
      */
     public function create()
     {
         // Declara os repositórios que serão usados
         /** @var GradeRepositoryInterface $gradeRepository */
         $gradeRepository = app(GradeRepositoryInterface::class);
+
         /** @var UserRepositoryInterface $userRepository */
         $userRepository = app(UserRepositoryInterface::class);
+
+        /** @var SubjectRepositoryInterface $subjectRepository */
+        $subjectRepository = app(SubjectRepositoryInterface::class);
 
         // Obtém os dados das tabelas auxiliares
         $grade = $gradeRepository->getAll(true)->map(function($item) {
@@ -60,26 +64,29 @@ class StudentsClassController extends Controller
             ];
         });
 
-        $students = $userRepository->getActiveUser(2);
+        $students = $userRepository->getActiveUser(TypeOfUsers::STUDENT);
+        $teachers = $userRepository->getActiveUser(TypeOfUsers::TEACHER);
 
-        return Inertia::render('StudentsClass/Create', [
-            'grade' => $grade,
-            'students' => $students
-        ]);
+        $subjects= $subjectRepository->getAll();
 
+        return view('students-classes.form', compact('grade', 'students', 'subjects', 'teachers'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        $this->repository->create($request->all());
+        $response = $this->repository->create($request->all());
 
-        return redirect()->route('students_class.index');
+        if ($response['success']){
+            return redirect()->route('students_class.index');
+        }
+
+        return redirect()->back()->withErrors($response['errors']);
     }
 
     /**
@@ -97,15 +104,19 @@ class StudentsClassController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\StudentsClass  $studentsClass
-     * @return \Inertia\Response
+     * @return
      */
     public function edit(StudentsClass $studentsClass)
     {
         // Declara os repositórios que serão usados
         /** @var GradeRepositoryInterface $gradeRepository */
         $gradeRepository = app(GradeRepositoryInterface::class);
+
         /** @var UserRepositoryInterface $userRepository */
         $userRepository = app(UserRepositoryInterface::class);
+
+        /** @var SubjectRepositoryInterface $subjectRepository */
+        $subjectRepository = app(SubjectRepositoryInterface::class);
 
         // Obtém os dados das tabelas auxiliares
         $grade = $gradeRepository->getAll(true)->map(function($item) {
@@ -117,57 +128,31 @@ class StudentsClassController extends Controller
             ];
         });
 
-        $listStudents = $studentsClass->students->toArray();
-        $listStudentsID = $studentsClass->students()->select('student_id')->get()->map(function ($item) {
-            return $item->student_id;
-        })->toArray();
+        $students = $userRepository->getActiveUser(TypeOfUsers::STUDENT);
+        $teachers = $userRepository->getActiveUser(TypeOfUsers::TEACHER);
 
-        $students = $userRepository->getActiveUser(2)->filter(function ($item) use ($listStudentsID) {
-            return !in_array($item->id, $listStudentsID);
-        })->toArray();
+        $subjects= $subjectRepository->getAll();
 
+        return view('students-classes.form', compact('studentsClass', 'grade', 'students', 'subjects', 'teachers'));
 
-        return Inertia::render('StudentsClass/Create', [
-            'grade' => $grade,
-            'studentsClass' => $studentsClass,
-            'students' => $students,
-            'listStudents' => $listStudents
-        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\StudentsClass  $studentsClass
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\StudentsClass $studentsClass
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, StudentsClass $studentsClass)
     {
-        $validate = Validator::make(
-            $request->all(),
-            [
-                'name' => 'required',
-                'grade_id' => 'required',
-            ]
-        );
+        $response = $this->repository->create($request->all(), $studentsClass);
 
-        if ($validate->fails()) {
-            return response()->json(false);
+        if ($response['success']){
+            return redirect()->route('students_class.index');
         }
 
-        $studentsClass->fill($request->all());
-        $studentsClass->save();
-
-        $studentsClass->students()->sync($request->listClassStudents);
-
-
-
-
-
-
-
-        return redirect()->route('students_class.index');
+        return redirect()->back()->withErrors($response['errors']);
     }
 
     /**
