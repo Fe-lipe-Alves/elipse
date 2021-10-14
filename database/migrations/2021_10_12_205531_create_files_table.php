@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWorksTable extends Migration
+class CreateFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateWorksTable extends Migration
      */
     public function up()
     {
-        Schema::create('works', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('lesson_id')->constrained('lessons');
-            $table->string('title');
-            $table->text('description');
-            $table->dateTime('deadline');
-            $table->decimal('grade')->nullable();
+            $table->integer('fileable_id');
+            $table->string('fileable_type');
+            $table->string('name');
+            $table->string('type');
+            $table->string('source');
+            $table->string('size');
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ class CreateWorksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('works');
+        Schema::dropIfExists('files');
     }
 }

@@ -6,6 +6,7 @@ namespace App\Repositories;
 
 use App\Models\StudentsClass;
 use App\Repositories\Contracts\StudentsClassInterface;
+use App\Support\Consts\GradeTypes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -84,5 +85,12 @@ class StudentsClassRepository implements StudentsClassInterface
                 'students.required' => 'informe os estudantes desta turma'
             ]
         );
+    }
+
+    public function resolveNameGrade(StudentsClass $studentsClass)
+    {
+        return $studentsClass->grade->year .
+            ($studentsClass->grade->grade_type_id == GradeTypes::ELEMENTARY ? 'º ano' : 'ª série') . ' ' .
+            $studentsClass->name;
     }
 }

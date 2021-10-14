@@ -185,6 +185,9 @@ class StudentsClassController extends Controller
 
     public function teachers(StudentsClass $studentsClass)
     {
-        $studentsClass->teachers();
+        return [
+            'success' => true,
+            'lessons' => $studentsClass->lessons()->with('subject')->get()
+        ];
     }
 }

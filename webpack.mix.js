@@ -20,3 +20,4 @@ mix.sass('resources/scss/style.scss', 'public/css');
 mix.js('resources/js/user.js', 'public/js');
 mix.js('resources/js/lesson.js', 'public/js');
 mix.js('resources/js/studentsClass.js', 'public/js');
+mix.js('resources/js/work.js', 'public/js');

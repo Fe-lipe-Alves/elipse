@@ -35,7 +35,9 @@
                                 data-id="{{ $student->id }}"
                                 data-list="all"
                                 data-active="false"
-                                style="{{ !$studentsClass->students->contains('id', $student->id) ?: 'display:none' }}"
+                                @if(!is_null($studentsClass))
+                                    style="{{ !$studentsClass->students->contains('id', $student->id) ?: 'display:none' }}"
+                                @endif
                             >
                                 {{ $student->name }}
                             </button>
@@ -77,6 +79,7 @@
                                     class="student text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-blue-100 hover:shadow-sm text-left"
                                     data-id="{{ $student->id }}"
                                 >
+                                    <input type="hidden" name="students[]" value="{{ $student->id }}">
                                     {{ $student->name }}
                                 </button>
                             @endforeach

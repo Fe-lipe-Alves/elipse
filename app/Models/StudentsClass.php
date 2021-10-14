@@ -21,8 +21,8 @@ class StudentsClass extends Model
 
     public function getDescriptionAttribute($value)
     {
-        $gradeType = $this->grade()->with('gradeType')->first()->gradeType->description;
-        return $this->grade_id . 'ª ' . $this->name . ' - '. $gradeType ;
+        $grade = $this->grade()->with('gradeType')->first();
+        return $grade->year . 'ª ' . $this->name . ' - '. $grade->gradeType->description ;
     }
 
     /**
@@ -52,6 +52,23 @@ class StudentsClass extends Model
 
     public function teachers()
     {
-        return $this->hasManyThrough(User::class, Lesson::class, 'id', 'students_class_id');
+        return $this->hasManyThrough(
+            User::class,
+            Lesson::class,
+            'students_class_id',
+            'id',
+            'id',
+            'teacher_id'
+        );
+    }
+
+    /**
+     * Obtém a turma de alunos relacionadas a esta aula
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class);
     }
 }
