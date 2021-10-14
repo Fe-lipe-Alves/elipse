@@ -62,8 +62,8 @@ class Select extends Component
                     $opt->value = $option->getAttribute($value);
                     $opt->description = $option->getAttribute($description);
                 } else {
-                    $opt->value = is_string($key) ? $key : ($key + 1);
-                    $opt->description = $option;
+                    $opt->value = is_string($key) ? $key : $option[$value];
+                    $opt->description = $option[$description];
                 }
 
                 $opts[] = $opt;

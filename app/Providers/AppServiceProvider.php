@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Repositories\Contracts\FileRepositoryInterface;
 use App\Repositories\Contracts\GradeRepositoryInterface;
 use App\Repositories\Contracts\GradeTypeRepositoryInterface;
 use App\Repositories\Contracts\LessonRepositoryInterface;
@@ -9,6 +10,7 @@ use App\Repositories\Contracts\StudentsClassInterface;
 use App\Repositories\Contracts\SubjectRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\Contracts\WorkRepositoryInterface;
+use App\Repositories\FileRepository;
 use App\Repositories\GradeRepository;
 use App\Repositories\GradeTypeRepository;
 use App\Repositories\LessonRepository;
@@ -44,5 +46,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(WorkRepositoryInterface::class, WorkRepository::class);
         $this->app->bind(SubjectRepositoryInterface::class, SubjectRepository::class);
         $this->app->bind(LessonRepositoryInterface::class, LessonRepository::class);
+        $this->app->bind(FileRepositoryInterface::class, FileRepository::class);
     }
 }

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\StudentsClass;
 use App\Models\Work;
 use App\Repositories\Contracts\LessonRepositoryInterface;
 use App\Repositories\Contracts\StudentsClassInterface;
 use App\Repositories\Contracts\WorkRepositoryInterface;
 use App\Support\Consts\TypeOfUsers;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -48,12 +50,18 @@ class WorkController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        //
+        $response = $this->repository->store($request->all());
+
+        if ($response['success']) {
+            $response = array_merge($response, ['route' => route('works.index')]);
+        }
+
+        return response()->json($response);
     }
 
     /**
@@ -70,24 +78,38 @@ class WorkController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Work  $work
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Work $work
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function edit(Work $work)
     {
-        //
+        /** @var StudentsClassInterface $students_class_repository */
+        $students_class_repository = app(StudentsClassInterface::class);
+        $studentsClasses = $students_class_repository->getAll();
+
+        $studentsClassID = $work->studentsClass()->first();
+
+        $lessons = $work->studentsClass()->first()->lessons()->with('subject')->get();
+
+        return view('works.form', compact('studentsClasses', 'work', 'studentsClassID', 'lessons'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Work  $work
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Work $work
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Work $work)
     {
-        //
+        $response = $this->repository->store($request->all(), $work);
+
+        if ($response['success']) {
+            $response = array_merge($response, ['route' => route('works.index')]);
+        }
+
+        return response()->json($response);
     }
 
     /**
@@ -99,5 +121,10 @@ class WorkController extends Controller
     public function destroy(Work $work)
     {
         //
+    }
+
+    public function getTeachers(StudentsClass $studentsClass)
+    {
+        return response()->json($studentsClass->teachers);
     }
 }

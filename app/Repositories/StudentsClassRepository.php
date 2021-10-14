@@ -6,6 +6,7 @@ namespace App\Repositories;
 
 use App\Models\StudentsClass;
 use App\Repositories\Contracts\StudentsClassInterface;
+use App\Support\Consts\GradeTypes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -30,43 +31,66 @@ class StudentsClassRepository implements StudentsClassInterface
      * Salva uma nova classe de alunos
      *
      * @param $data
-     * @return \Illuminate\Http\JsonResponse|void
+     * @param null $studentsClass
+     * @return array
      */
-    public function create($data)
+    public function create($data, $studentsClass = null): array
     {
-        $validate = Validator::make(
-            $data,
-            [
-                'name' => 'required', Rule::unique('students_class', 'name')->ignore(false, 'active'),
-                'grade_id' => 'required',
-            ],
-            [
-                'name.required' => 'Nome é obrigatório',
-                'name.unique' => 'Nome é obrigatório',
-            ]
-        );
-
-        $exists = StudentsClass::query()->where('name', $data['name'])->where('active', true)->exists();
-        if ($exists) {
-            return response()->json(['error'=>['name' => 'Esta turma já existe']]);
-        }
+        $validate = $this->validate($data);
 
         if ($validate->fails()) {
-            return response()->json(false);
+            return [
+                'success' => false,
+                'errors' => $validate->errors()
+            ];
         }
 
-        $studentsClass = new StudentsClass([
+        if (is_null($studentsClass)) {
+            $studentsClass = new StudentsClass();
+        }
+
+        $studentsClass->fill([
             'grade_id' => $data['grade_id'],
             'name' => $data['name'],
-            'active' => !!$data['active']
+            'active' => true
         ]);
         $studentsClass->save();
 
-        $studentsClass->students()->sync($data['listClassStudents']);
+        $studentsClass->students()->sync($data['students']);
+        return [
+            'success' => true,
+            'studentsClass' => $studentsClass,
+        ];
     }
 
-    public function validate()
+    /**
+     * Aplica regras de validação nos dados recebidos
+     *
+     * @param array $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function validate(array $data)
     {
+        return Validator::make(
+            $data,
+            [
+                'name' => [
+                    'required',
+                ],
+                'grade_id' => ['required'],
+                'students' => ['required', 'array']
+            ],
+            [
+                'name.required' => 'Nome é obrigatório',
+                'students.required' => 'informe os estudantes desta turma'
+            ]
+        );
+    }
 
+    public function resolveNameGrade(StudentsClass $studentsClass)
+    {
+        return $studentsClass->grade->year .
+            ($studentsClass->grade->grade_type_id == GradeTypes::ELEMENTARY ? 'º ano' : 'ª série') . ' ' .
+            $studentsClass->name;
     }
 }

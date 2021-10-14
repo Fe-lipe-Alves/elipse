@@ -18,8 +18,8 @@ class CreateWorksTable extends Migration
             $table->foreignId('lesson_id')->constrained('lessons');
             $table->string('title');
             $table->text('description');
-            $table->timestamp('deadline');
-            $table->decimal('grade');
+            $table->dateTime('deadline');
+            $table->decimal('grade')->nullable();
             $table->timestamps();
         });
     }
