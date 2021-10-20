@@ -9,14 +9,16 @@
                     </h3>
                 </div>
                 <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
-                    <a
-                        class="bg-primary-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
-                        type="button"
-                        style="transition:all .15s ease"
-                        href="{{ route('works.create') }}"
-                    >
-                        Novo
-                    </a>
+                    @if(auth()->user()->type_of_user_id != \App\Support\Consts\TypeOfUsers::STUDENT)
+                        <a
+                            class="bg-primary-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
+                            type="button"
+                            style="transition:all .15s ease"
+                            href="{{ route('works.create') }}"
+                        >
+                            Novo
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>

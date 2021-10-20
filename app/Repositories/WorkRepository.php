@@ -28,6 +28,35 @@ class WorkRepository implements WorkRepositoryInterface
     }
 
     /**
+     * Obtém todos os trabalhos registrados para o professor
+     *
+     * @return Work[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getWorksByTeacher($teacher_id)
+    {
+        return Work::query()
+            ->join('lessons', 'works.lesson_id', '=', 'lessons.id')
+            ->where('teacher_id', $teacher_id)
+            ->with(['lesson.subject', 'lesson.studentsClass.grade.gradeType'])
+            ->get();
+    }
+
+    /**
+     * Obtém todos os trabalhos registrados para o aluno
+     *
+     * @return Work[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getWorksByStudent($student_id)
+    {
+        return Work::query()
+            ->join('lessons', 'works.lesson_id', '=', 'lessons.id')
+            ->join('student_students_class', 'lessons.students_class_id', '=', 'student_students_class.id')
+            ->where('student_id', $student_id)
+            ->with(['lesson.subject', 'lesson.studentsClass.grade.gradeType'])
+            ->get();
+    }
+
+    /**
      * Cria ou atualiza um registro de trabalho
      *
      * @param array $data

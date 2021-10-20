@@ -97,4 +97,18 @@ class LessonRepository implements LessonRepositoryInterface
 
         return['success' => $deleted];
     }
+
+    /**
+     * Obtém toddas as aulas de um professor
+     *
+     * @param $teacher_id
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getAllByTeacher($teacher_id)
+    {
+        return Lesson::query()
+            ->where('teacher_id', $teacher_id)
+            ->with(['subject', 'teacher', 'studentsClass'])
+            ->get();
+    }
 }

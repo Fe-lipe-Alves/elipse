@@ -11,6 +11,7 @@
             <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">Informações do trabalho</h6>
 
             <div class="flex flex-wrap">
+                @if(auth()->user()->type_of_user_id != \App\Support\Consts\TypeOfUsers::TEACHER)
 
                 <x-form.select name="students_class_id" label="Turma" width="w-full lg:w-4/12" required >
                     @if(is_null($work))
@@ -35,7 +36,7 @@
                 </x-form.select>
 
                 <x-form.select name="lesson_id" label="Aula" width="w-full lg:w-4/12 disabled:opacity-50" required>
-                    @isset($lessons)
+                    @empty($lessons)
                         @foreach($lessons as $lesson)
                             <x-form.option
                                 :value="$lesson->id"
@@ -43,8 +44,18 @@
                                 :selected="$work->lesson_id == $lesson->id"
                             />
                         @endforeach
-                    @endisset
+                    @endempty
                 </x-form.select>
+                @else
+                    <x-form.select name="lesson_id" label="Aula" width="w-full lg:w-4/12 disabled:opacity-50" required>
+                        @foreach($lessons as $lesson)
+                            <x-form.option
+                                :value="$lesson->id"
+                                :description="$lesson->studentsClass->description"
+                            />
+                        @endforeach
+                    </x-form.select>
+                @endif
 
                 <x-form.input type="datetime-local" :value="!is_null($work)?$work->deadline->format('Y-m-d\TH:i'):null" name="deadline" id="deadline" label="Prazo" width="w-full lg:w-4/12" required />
 

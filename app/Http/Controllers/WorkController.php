@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewWork;
 use App\Models\StudentsClass;
 use App\Models\Work;
 use App\Repositories\Contracts\LessonRepositoryInterface;
 use App\Repositories\Contracts\StudentsClassInterface;
 use App\Repositories\Contracts\WorkRepositoryInterface;
 use App\Support\Consts\TypeOfUsers;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class WorkController extends Controller
 {
@@ -28,7 +29,17 @@ class WorkController extends Controller
      */
     public function index()
     {
-        $works = $this->repository->getWorks();
+        switch (Auth::user()->type_of_user_id) {
+            case TypeOfUsers::TEACHER:
+                $works = $this->repository->getWorksByTeacher(Auth::id());
+                break;
+            case TypeOfUsers::STUDENT:
+                $works = $this->repository->getWorksByStudent(Auth::id());
+                break;
+            default:
+                $works = $this->repository->getWorks();
+                break;
+        }
 
         return view('works.index', compact('works'));
     }
@@ -44,7 +55,18 @@ class WorkController extends Controller
         $students_class_repository = app(StudentsClassInterface::class);
         $studentsClasses = $students_class_repository->getAll();
 
-        return view('works.form', compact('studentsClasses'));
+        $lessons = null;
+        switch (Auth::user()->type_of_user_id) {
+            case TypeOfUsers::TEACHER:
+                $lessonsRepository = app(LessonRepositoryInterface::class);
+                $lessons = $lessonsRepository->getAllByTeacher(Auth::id());
+                break;
+            case TypeOfUsers::STUDENT:
+                abort(403);
+                break;
+        }
+
+        return view('works.form', compact('studentsClasses', 'lessons'));
     }
 
     /**
@@ -79,10 +101,17 @@ class WorkController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param \App\Models\Work $work
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+//     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function edit(Work $work)
     {
+        $user = new \stdClass();
+        $user->name = 'Felipe';
+        $user->email = 'fe-lipe-alves@yopmail.com';
+
+//        return new \App\Mail\NewWork($user, $work);
+        Mail::send(new NewWork($user, $work));
+
         /** @var StudentsClassInterface $students_class_repository */
         $students_class_repository = app(StudentsClassInterface::class);
         $studentsClasses = $students_class_repository->getAll();
