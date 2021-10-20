@@ -115,12 +115,14 @@ class WorkController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Work  $work
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Work $work
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Work $work)
     {
-        //
+        $this->repository->delete($work);
+
+        return redirect()->route('works.index');
     }
 
     public function getTeachers(StudentsClass $studentsClass)

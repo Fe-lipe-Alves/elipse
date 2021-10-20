@@ -30,4 +30,12 @@ interface WorkRepositoryInterface
      * @return \Illuminate\Contracts\Validation\Validator
      */
     public function validate(array $data, Work $work = null);
+
+    /**
+     * Deleta um registro de trabalho
+     *
+     * @param Work $work
+     * @return array
+     */
+    public function delete(Work $work): array;
 }

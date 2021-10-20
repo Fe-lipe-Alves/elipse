@@ -75,7 +75,6 @@ class WorkRepository implements WorkRepositoryInterface
             ];
         } catch (\Exception $exception) {
             DB::rollBack();
-            dd($exception);
             return [
                 'success' => false,
                 'message' => 'Ocorreu um erro ao salvar',
@@ -108,5 +107,27 @@ class WorkRepository implements WorkRepositoryInterface
                 'description.required' => 'O campo descrição é obrigatório',
             ]
         );
+    }
+
+    /**
+     * Deleta um registro de trabalho
+     *
+     * @param Work $work
+     * @return array
+     */
+    public function delete(Work $work): array
+    {
+        /** @var FileRepositoryInterface $fileRepository */
+        $fileRepository = app(FileRepositoryInterface::class);
+
+        foreach ($work->files as $file) {
+            $fileRepository->deletedById($file->id);
+        }
+
+        $deleted = $work->delete();
+
+        return [
+            'success' => $deleted
+        ];
     }
 }

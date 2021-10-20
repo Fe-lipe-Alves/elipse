@@ -155,6 +155,17 @@ var checkHasFiles = function checkHasFiles() {
   }
 };
 
+var alertErrors = function alertErrors(errors) {
+  var keys = Object.keys(errors);
+  keys.forEach(function (item) {
+    var html = '<small class="error-input text-red-600">' + errors[item] + '</small>';
+    $(html).insertAfter('[name="' + item + '"]');
+  });
+  $([document.documentElement, document.body]).animate({
+    scrollTop: $(".error-input").offset().top - 80
+  }, 500);
+};
+
 $(document).ready(function () {
   $('#students_class_id').on('change', function () {
     var route = $(this).find(':selected').data('teachers'),
@@ -206,8 +217,8 @@ $(document).ready(function () {
         if (response.success) {
           $(location).attr('href', response.route);
         } else {
-          if (Object.hasOwnProperty(response.error)) {
-            alert('erro');
+          if (response.hasOwnProperty('errors')) {
+            alertErrors(response.errors);
           }
         }
       }
