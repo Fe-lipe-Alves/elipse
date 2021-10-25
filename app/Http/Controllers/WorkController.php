@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\NewWork;
 use App\Models\StudentsClass;
 use App\Models\Work;
 use App\Repositories\Contracts\LessonRepositoryInterface;
@@ -11,7 +10,6 @@ use App\Repositories\Contracts\WorkRepositoryInterface;
 use App\Support\Consts\TypeOfUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 
 class WorkController extends Controller
 {
@@ -94,7 +92,7 @@ class WorkController extends Controller
      */
     public function show(Work $work)
     {
-        //
+        return view('works.show', compact('work'));
     }
 
     /**
@@ -105,13 +103,6 @@ class WorkController extends Controller
      */
     public function edit(Work $work)
     {
-        $user = new \stdClass();
-        $user->name = 'Felipe';
-        $user->email = 'fe-lipe-alves@yopmail.com';
-
-//        return new \App\Mail\NewWork($user, $work);
-        Mail::send(new NewWork($user, $work));
-
         /** @var StudentsClassInterface $students_class_repository */
         $students_class_repository = app(StudentsClassInterface::class);
         $studentsClasses = $students_class_repository->getAll();
@@ -157,5 +148,16 @@ class WorkController extends Controller
     public function getTeachers(StudentsClass $studentsClass)
     {
         return response()->json($studentsClass->teachers);
+    }
+
+    public function response(Work $work, Request $request)
+    {
+        $response = $this->repository->saveResponse($work, Auth::user(), $request->all());
+
+        if ($response['success']) {
+            $response = array_merge($response, ['route' => route('works.index')]);
+        }
+
+        return response()->json($response);
     }
 }

@@ -65,4 +65,11 @@ class Work extends Model
             'subject_id'
         );
     }
+
+    public function response($student_id)
+    {
+        return $this
+            ->hasOne(ResponseWork::class)
+            ->where('student_id', $student_id);
+    }
 }
