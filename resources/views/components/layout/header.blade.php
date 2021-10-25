@@ -21,13 +21,50 @@
         </form>--}}
 
         <ul class="flex-col md:flex-row list-none items-center hidden md:flex">
-            <a class="text-blueGray-500 block" href="#" id="userHeaderButton" data-hundle="dropdown" data-for="userHeaderBox">
-                <div class="items-center flex">
+            <li class="inline-block relative mx-3">
+                <a
+                    class="text-white block py-1 px-3"
+                    href="{{ route('messages.index') }}"
+                    onclick="openDropdown(event,'notification-dropdown')"
+                    title="Mensagens"
+                >
+                    <i class="fas fa-envelope"></i>
+                </a>
+                <div
+                    class="hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1"
+                    style="min-width: 12rem;"
+                    id="notification-dropdown"
+                >
+                    <a
+                        href="#"
+                        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
+                    >Action</a
+                    ><a
+                        href="#"
+                        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
+                    >Another action</a
+                    ><a
+                        href="#"
+                        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
+                    >Something else here</a
+                    >
+                    <div class="h-0 my-2 border border-solid border-blueGray-100"></div>
+                    <a
+                        href="#"
+                        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
+                    >Seprated link</a
+                    >
+                </div>
+            </li>
+            <li>
+                <a class="text-blueGray-500 block" href="#" id="userHeaderButton" data-hundle="dropdown" data-for="userHeaderBox">
+                    <div class="items-center flex">
                   <span class="w-12 h-12 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full">
                       <img alt="{{ auth()->user()->name }}" class="w-full rounded-full align-middle border-none shadow-lg" src="{{ asset('images/team-1-800x800.jpg') }}"/>
                   </span>
-                </div>
-            </a>
+                    </div>
+                </a>
+            </li>
 
             <div
                 class="hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1"

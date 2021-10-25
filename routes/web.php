@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\StudentsClassController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
@@ -61,6 +62,12 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::resource('aulas', LessonController::class)
         ->parameters(['aulas' => 'lesson'])
         ->names('lessons');
+
+    Route::get('mensagens', [MessageController::class, 'index'])
+        ->name('messages.index');
+
+    Route::get('mensagens/nova',[MessageController::class, 'new'])
+        ->name('messages.new');
 
 });
 //Route::get('checkName', [StudentsClassController::class, 'checkName'])->name('checkName');
