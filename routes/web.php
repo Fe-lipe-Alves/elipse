@@ -51,6 +51,9 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         ->parameters(['trabalhos' => 'work'])
         ->names('works');
 
+    Route::post('trabalhos/{work}/resposta', [WorkController::class, 'response'])
+        ->name('works.response');
+
     Route::resource('disciplinas', SubjectController::class)
         ->parameters(['disciplinas' => 'subject'])
         ->names('subjects');

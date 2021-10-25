@@ -8,7 +8,6 @@ use App\Repositories\Contracts\LessonRepositoryInterface;
 use App\Repositories\Contracts\StudentsClassInterface;
 use App\Repositories\Contracts\WorkRepositoryInterface;
 use App\Support\Consts\TypeOfUsers;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,7 +27,17 @@ class WorkController extends Controller
      */
     public function index()
     {
-        $works = $this->repository->getWorks();
+        switch (Auth::user()->type_of_user_id) {
+            case TypeOfUsers::TEACHER:
+                $works = $this->repository->getWorksByTeacher(Auth::id());
+                break;
+            case TypeOfUsers::STUDENT:
+                $works = $this->repository->getWorksByStudent(Auth::id());
+                break;
+            default:
+                $works = $this->repository->getWorks();
+                break;
+        }
 
         return view('works.index', compact('works'));
     }
@@ -44,7 +53,18 @@ class WorkController extends Controller
         $students_class_repository = app(StudentsClassInterface::class);
         $studentsClasses = $students_class_repository->getAll();
 
-        return view('works.form', compact('studentsClasses'));
+        $lessons = null;
+        switch (Auth::user()->type_of_user_id) {
+            case TypeOfUsers::TEACHER:
+                $lessonsRepository = app(LessonRepositoryInterface::class);
+                $lessons = $lessonsRepository->getAllByTeacher(Auth::id());
+                break;
+            case TypeOfUsers::STUDENT:
+                abort(403);
+                break;
+        }
+
+        return view('works.form', compact('studentsClasses', 'lessons'));
     }
 
     /**
@@ -72,14 +92,14 @@ class WorkController extends Controller
      */
     public function show(Work $work)
     {
-        //
+        return view('works.show', compact('work'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param \App\Models\Work $work
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+//     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function edit(Work $work)
     {
@@ -115,16 +135,29 @@ class WorkController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Work  $work
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Work $work
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Work $work)
     {
-        //
+        $this->repository->delete($work);
+
+        return redirect()->route('works.index');
     }
 
     public function getTeachers(StudentsClass $studentsClass)
     {
         return response()->json($studentsClass->teachers);
+    }
+
+    public function response(Work $work, Request $request)
+    {
+        $response = $this->repository->saveResponse($work, Auth::user(), $request->all());
+
+        if ($response['success']) {
+            $response = array_merge($response, ['route' => route('works.index')]);
+        }
+
+        return response()->json($response);
     }
 }

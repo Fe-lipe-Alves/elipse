@@ -31,6 +31,19 @@ const checkHasFiles = () => {
     }
 }
 
+const alertErrors = errors => {
+
+    let keys = Object.keys(errors);
+    keys.forEach( (item) => {
+        let html = '<small class="error-input text-red-600">' + errors[item] + '</small>'
+        $(html).insertAfter('[name="'+ item +'"]')
+    } )
+
+    $([document.documentElement, document.body]).animate({
+        scrollTop: $(".error-input").offset().top - 80
+    }, 500);
+}
+
 $(document).ready(function() {
 
     $('#students_class_id').on('change', function() {
@@ -77,8 +90,8 @@ $(document).ready(function() {
                 if (response.success) {
                     $(location).attr('href', response.route)
                 } else {
-                    if (Object.hasOwnProperty(response.error)) {
-                        alert('erro');
+                    if (response.hasOwnProperty('errors')) {
+                        alertErrors(response.errors);
                     }
                 }
             }

@@ -74,6 +74,11 @@ class UserRepository implements UserRepositoryInterface
      */
     public function validate(array $input, User $user = null)
     {
+        $rule = Rule::unique('users', 'email');
+        if (!is_null($user)) {
+            $rule->ignoreModel($user);
+        }
+
         return Validator::make(
             $input,
             [
@@ -82,7 +87,7 @@ class UserRepository implements UserRepositoryInterface
                     'required',
                     'email',
                     'max:255',
-                    Rule::unique('users', 'email')->ignoreModel($user)
+                    $rule
                 ],
                 'birth_date'      => ['required'],
                 'phone'           => ['required'],

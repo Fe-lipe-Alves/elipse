@@ -9,14 +9,16 @@
                     </h3>
                 </div>
                 <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
-                    <a
-                        class="bg-primary-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
-                        type="button"
-                        style="transition:all .15s ease"
-                        href="{{ route('works.create') }}"
-                    >
-                        Novo
-                    </a>
+                    @if(auth()->user()->type_of_user_id != \App\Support\Consts\TypeOfUsers::STUDENT)
+                        <a
+                            class="bg-primary-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
+                            type="button"
+                            style="transition:all .15s ease"
+                            href="{{ route('works.create') }}"
+                        >
+                            Novo
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -52,7 +54,7 @@
                             {{ $work->subject->description }}
                         </td>
                         <td class="w-5/12 max-w-lg overflow-ellipsis overflow-hidden border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                            {{ $work->title }}
+                            <a href="{{ route('works.show', ['work' => $work->id]) }}" class="text-blue-600">{{ $work->title }}</a>
                         </td>
                         <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                             {{ $work->deadline->format('d/m/Y') }}
