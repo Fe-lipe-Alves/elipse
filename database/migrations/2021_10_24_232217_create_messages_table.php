@@ -15,6 +15,10 @@ class CreateMessagesTable extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('receiver_id')->constrained('users');
+            $table->foreignId('sender_id')->constrained('users');
+            $table->text('content');
+            $table->boolean('file');
             $table->timestamps();
         });
     }

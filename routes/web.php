@@ -69,5 +69,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('mensagens/nova',[MessageController::class, 'new'])
         ->name('messages.new');
 
+    Route::post('mensagens/enviar', [MessageController::class, 'send'])
+        ->name('messages.send');
+
 });
 //Route::get('checkName', [StudentsClassController::class, 'checkName'])->name('checkName');

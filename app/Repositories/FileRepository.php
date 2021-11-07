@@ -36,8 +36,11 @@ class FileRepository implements FileRepositoryInterface
                 'success' => true,
                 'files' => $filesProcessed,
             ];
-        } elseif ($file instanceof UploadedFile) {
-            $source = $file->store('public/files');
+        } elseif ($file instanceof UploadedFile || $file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+            $sds = new \Illuminate\Http\File($file->getPathname());
+
+            $source = Storage::putFile('public/files', $sds);
+
             if (!$source) {
                 return [
                     'success' => false,
