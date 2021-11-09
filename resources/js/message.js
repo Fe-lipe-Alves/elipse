@@ -1,81 +1,157 @@
+var last = 0
 
-const receiverListItemClick = function () {
-    $('.receiver-list-item').each((index, item) => {
-        $(item).removeClass('bg-primary-500-light shadow-md').addClass('hover:bg-white')
-    })
+const
+    dateFormat = (stringDate) => {
+        var date = new Date(stringDate),
+            day  = date.getDate().toString(),
+            dayF = (day.length === 1) ? '0'+day : day,
+            month  = (date.getMonth()+1).toString(),
+            monthF = (month.length === 1) ? '0'+month : month,
+            yearF = date.getFullYear(),
+            hour = date.getHours(),
+            minutes = date.getMinutes(),
+            seconds = date.getSeconds()
+        return dayF+"/"+monthF+"/"+yearF+" "+hour+":"+minutes+":"+seconds
+    },
 
-    $(this).addClass('bg-primary-500-light shadow-md').removeClass('hover:bg-white')
+    insertMessage = (message, end = false) => {
+        let receiver_id = $('#receiver_id').val(),
+            send = message.sender_id !== parseInt(receiver_id),
+            content = '',
+            created_at = dateFormat(message.created_at)
 
-    $('#receiver_id').val($(this).data('id'))
-}
-
-const checkContent = () => {
-    return $('#text-new-message').val() !== '' || $('#files')[0].files.length > 0
-}
-
-const checkContentSend = function () {
-    if (checkContent()) {
-        $('#btn-send').removeClass('bg-white').addClass('bg-primary-500').prop('disabled', false)
-    } else {
-        $('#btn-send').addClass('bg-white').removeClass('bg-primary-500').prop('disabled', true)
-    }
-}
-
-const changeBoxInputFile = function () {
-    let boxFile = $('#box-files-name'),
-        boxInput = $('#box-input-text'),
-        inputFiles = $('#files'),
-        countFiles = inputFiles[0].files.length
-
-    $('#text-new-message').val('')
-
-    if (countFiles > 0) {
-        let names = []
-
-        $(inputFiles[0].files).each((index, item) => {
-            names.push(item.name)
-        })
-        names = names.join(', ')
-
-        boxInput.addClass('hidden')
-        boxFile.removeClass('hidden')
-        boxFile.find('#length').text(countFiles)
-        boxFile.find('#files-name').html(names).attr('title', names)
-    } else {
-        boxInput.removeClass('hidden')
-        boxFile.addClass('hidden')
-    }
-}
-
-const sendMessage = () => {
-    let text = $('#text-new-message').val(),
-        files = $('#files')[0].files,
-        form = $('#newMessage'),
-        formData = new FormData(form[0])
-
-    // for (let i=0; i < files.length; i++) {
-    //     formData.append('files[]')
-    // }
-
-    $.ajax({
-        url: form.attr('action'),
-        type: 'post',
-        data: formData,
-        async: false,
-        cache: false,
-        contentType: false,
-        enctype: 'multipart/form-data',
-        processData: false,
-        dataType: 'json',
-        success: function(response) {
-            console.log(response)
+        if (message.file) {
+            if (message.files !== null) {
+                let images = ['PNG', 'JPG', 'JPEG', 'GIF']
+                if (images.indexOf(message.files.type.toUpperCase()) > -1) {
+                    content = '<a href="' + message.files.source + '" target="_blank">' +
+                        '<img src="' + message.files.source + '" class="max-w-full" title="' + message.files.name + '" alt="' + message.files.name + '"/>' +
+                        '</a>'
+                } else {
+                    content = '<a href="' + message.files.source + '">' +
+                        '<span>' + message.files.name + '</span>' +
+                        '</a>'
+                }
+            } else {
+                content = '<p><small class="text-sm text-red-300">Erro ao obter arquivo.</small></p>'
+            }
+        } else {
+            content = '<p class="text-sm">'+ message.content +'</p>\n';
         }
-    })
 
-    // if (text !== '') {
-    //     formData.append('')
-    // }
-}
+        let html =
+            '<div class="w-full flex flex-col '+ (send ? 'items-end' : '') + '">\n' +
+                '<div class="w-8/12 px-4 py-2 ml-1 mr-2  rounded-lg shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150 ' +
+                        (send ? 'bg-white' : 'bg-primary-500-light') +
+                        (last === message.sender_id ? ' mt-1' : 'mt-3') +
+                '">\n' +
+                    content +
+                    '<small class="text-xxs '+ (send ? 'float-right' : '') + '">' + created_at + '</small>\n' +
+                '</div>\n' +
+            '</div>'
+
+        if (end) {
+            $('#history').append(html)
+        } else {
+            $('#history').prepend(html)
+        }
+    }
+
+    receiverListItemClick = function () {
+        if (!$(this).data('active')) {
+            $('.receiver-list-item').each((index, item) => {
+                $(item).removeClass('bg-primary-500-light shadow-md').addClass('hover:bg-white').data('active', false)
+            })
+            $(this).addClass('bg-primary-500-light shadow-md').removeClass('hover:bg-white').data('active', true)
+            $('#receiver_id').val($(this).data('id'))
+
+            $('#history').html('');
+            showLoadingHistory()
+            $.get($(this).data('route')).then( response => {
+                if (response.success) {
+                    response.messages.forEach( message => {
+                        insertMessage(message)
+                    })
+
+                    showHistory()
+                }
+            })
+        }
+    },
+
+    showHistory = () => {
+        $('#newMessage, #history').removeClass('hidden')
+        $('#emptyHistory, #loadingHistory').addClass('hidden')
+    },
+
+    showLoadingHistory = () => {
+        $('#newMessage, #history, #emptyHistory').addClass('hidden')
+        $('#loadingHistory').removeClass('hidden')
+    },
+
+    checkContent = () => {
+        return $('#text-new-message').val() !== '' || $('#files')[0].files.length > 0
+    },
+
+    checkContentSend = function () {
+        if (checkContent()) {
+            $('#btn-send').removeClass('bg-white').addClass('bg-primary-500').prop('disabled', false)
+        } else {
+            $('#btn-send').addClass('bg-white').removeClass('bg-primary-500').prop('disabled', true)
+        }
+    },
+
+    changeBoxInputFile = function () {
+        let boxFile = $('#box-files-name'),
+            boxInput = $('#box-input-text'),
+            inputFiles = $('#files'),
+            countFiles = inputFiles[0].files.length
+
+        $('#text-new-message').val('')
+
+        if (countFiles > 0) {
+            let names = []
+
+            $(inputFiles[0].files).each((index, item) => {
+                names.push(item.name)
+            })
+            names = names.join(', ')
+
+            boxInput.addClass('hidden')
+            boxFile.removeClass('hidden')
+            boxFile.find('#length').text(countFiles)
+            boxFile.find('#files-name').html(names).attr('title', names)
+        } else {
+            boxInput.removeClass('hidden')
+            boxFile.addClass('hidden')
+        }
+    },
+
+    sendMessage = () => {
+        let form = $('#newMessage'),
+            formData = new FormData(form[0])
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'post',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            enctype: 'multipart/form-data',
+            processData: false,
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    response.messages.forEach( message => {
+                        insertMessage(message, true)
+                    })
+
+                    showHistory()
+                }
+            }
+        })
+    }
 
 $(document).ready(function () {
 

@@ -72,5 +72,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('mensagens/enviar', [MessageController::class, 'send'])
         ->name('messages.send');
 
+    Route::get('mensagens/historico/{receiver_id}/{offset?}',[MessageController::class, 'history'])
+        ->name('messages.history');
+
 });
 //Route::get('checkName', [StudentsClassController::class, 'checkName'])->name('checkName');

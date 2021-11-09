@@ -17,7 +17,8 @@ class MessageController extends Controller
 
     public function index()
     {
-        return view('messages.index');
+        $recents = $this->repository->recent(Auth::id());
+        return view('messages.index', compact('recents'));
     }
 
     public function new()
@@ -28,6 +29,17 @@ class MessageController extends Controller
     public function send(Request $request)
     {
         $response = $this->repository->sendByRequest($request);
+        return response()->json($response);
+    }
+
+    public function history($receiver_id, $offset = 0)
+    {
+        if (!$receiver_id) {
+            return ['success' => false, 'message' => 'Problemas ao encontrar usuário'];
+        }
+
+        $response = $this->repository->history($receiver_id, Auth::id(), $offset);
+
         return response()->json($response);
     }
 }

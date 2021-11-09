@@ -19,21 +19,22 @@
         <div class="flex flex-wrap">
             <div class="w-full lg:w-4/12 bg-white border-r overflow-auto" id="list" style="height: 70vh">
                 <ul>
-                    @for($i=0; $i<10; $i++)
+                    @foreach($recents as $recent)
                         <li
                             class="receiver-list-item text-blueGray-500 border-t-0 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap px-4 py-2 hover:shadow hover:bg-white ease-linear transition-all duration-100"
-                            data-id="{{ $i }}"
+                            data-id="{{ $recent->id }}"
+                            data-route="{{ route('messages.history', ['receiver_id' => $recent->id]) }}"
                         >
-                            Felipe Alves
+                            {{ $recent->name }}
                             <br/>
                             <small>Aluno</small>
                         </li>
-                    @endfor
+                    @endforeach
                 </ul>
             </div>
 
             <div class="w-full lg:w-8/12 bg-white shadow-inner overflow-auto flex flex-col" id="messages" style="height: 70vh">
-                <div id="history" class="flex-1 w-full overflow-auto py-4">
+                <div id="history" class="flex-1 w-full overflow-auto py-4 hidden">
 
                     @php($last = null)
                     @for($i=0; $i<50; $i++)
@@ -51,7 +52,13 @@
                     @endfor
 
                 </div>
-                <form action="{{ route('messages.send') }}" id="newMessage" class="w-full border-t p-2 flex bg-gray-100">
+                <div id="emptyHistory" class="flex-1 w-full overflow-auto py-4 items-center flex flex-col text-center justify-center">
+                    <p class="text-sm text-blueGray-500">Selecione um contato para conversar</p>
+                </div>
+                <div id="loadingHistory" class="flex-1 w-full overflow-auto py-4 items-center flex flex-col text-center justify-center hidden">
+                    <p class="text-sm text-blueGray-500">Aguarde</p>
+                </div>
+                <form action="{{ route('messages.send') }}" id="newMessage" class="w-full border-t p-2 flex bg-gray-100 hidden">
                     @csrf
                     <input type="hidden" name="receiver_id" id="receiver_id" />
                     <input type="file" class="hidden" name="files[]" id="files" multiple="multiple" />

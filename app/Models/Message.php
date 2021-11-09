@@ -15,4 +15,13 @@ class Message extends Model
         'content',
         'file',
     ];
+
+    protected $casts = [
+        'file' => 'boolean'
+    ];
+
+    public function files()
+    {
+        return $this->morphOne(File::class, 'fileable');
+    }
 }
