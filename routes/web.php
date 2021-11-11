@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\StudentsClassController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
@@ -44,9 +45,15 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         ->parameters(['turmas' => 'studentsClass'])
         ->names('students_class');
 
+    Route::get('turmas/{studentsClass}/professores', [StudentsClassController::class, 'teachers'])
+        ->name('students_class.teachers');
+
     Route::resource('trabalhos', WorkController::class)
         ->parameters(['trabalhos' => 'work'])
         ->names('works');
+
+    Route::post('trabalhos/{work}/resposta', [WorkController::class, 'response'])
+        ->name('works.response');
 
     Route::resource('disciplinas', SubjectController::class)
         ->parameters(['disciplinas' => 'subject'])
@@ -55,6 +62,18 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::resource('aulas', LessonController::class)
         ->parameters(['aulas' => 'lesson'])
         ->names('lessons');
+
+    Route::get('mensagens', [MessageController::class, 'index'])
+        ->name('messages.index');
+
+    Route::get('mensagens/nova',[MessageController::class, 'new'])
+        ->name('messages.new');
+
+    Route::post('mensagens/enviar', [MessageController::class, 'send'])
+        ->name('messages.send');
+
+    Route::get('mensagens/historico/{receiver_id}/{offset?}',[MessageController::class, 'history'])
+        ->name('messages.history');
 
 });
 //Route::get('checkName', [StudentsClassController::class, 'checkName'])->name('checkName');

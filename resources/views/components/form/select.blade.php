@@ -19,10 +19,14 @@
             {{ $attributes }}
         >
 
+            {{ $slot }}
+
             @foreach($options as $option)
-                <option value="{{ $option->value }}" {{ $isSelected($option->value) ? 'selected="selected"' : '' }}>
-                    {{ $option->description }}
-                </option>
+                <x-form.option
+                    :value="$option->value"
+                    :description="$option->description"
+                    :selected="$isSelected($option->value)"
+                />
             @endforeach
 
         </select>

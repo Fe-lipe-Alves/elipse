@@ -1,4 +1,6 @@
 const colors = require('tailwindcss/colors')
+const theme = require('tailwindcss/defaultTheme')
+const {fontSize} = require("tailwindcss/lib/plugins");
 
 module.exports = {
     purge: [
@@ -37,7 +39,16 @@ module.exports = {
         fontFamily: {
             sans: ['Nunito', 'sans-serif'],
         },
-        extend: {},
+        fontSize: {
+            'xxs': '.65rem',
+            ...theme.fontSize,
+        },
+        extend: {
+            width: {
+                '0.5/12': '4.166666%',
+                '5.5/12': '45.833332%',
+            }
+        },
     },
     variants: {
         extend: {},
