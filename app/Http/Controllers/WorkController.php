@@ -53,7 +53,7 @@ class WorkController extends Controller
         $students_class_repository = app(StudentsClassInterface::class);
         $studentsClasses = $students_class_repository->getAll();
 
-        $lessons = null;
+        $lessons = [];
         switch (Auth::user()->type_of_user_id) {
             case TypeOfUsers::TEACHER:
                 $lessonsRepository = app(LessonRepositoryInterface::class);

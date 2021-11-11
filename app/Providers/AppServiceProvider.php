@@ -6,6 +6,7 @@ use App\Repositories\Contracts\FileRepositoryInterface;
 use App\Repositories\Contracts\GradeRepositoryInterface;
 use App\Repositories\Contracts\GradeTypeRepositoryInterface;
 use App\Repositories\Contracts\LessonRepositoryInterface;
+use App\Repositories\Contracts\MessageRepositoryInterface;
 use App\Repositories\Contracts\StudentsClassInterface;
 use App\Repositories\Contracts\SubjectRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
@@ -14,6 +15,7 @@ use App\Repositories\FileRepository;
 use App\Repositories\GradeRepository;
 use App\Repositories\GradeTypeRepository;
 use App\Repositories\LessonRepository;
+use App\Repositories\MessageRepository;
 use App\Repositories\StudentsClassRepository;
 use App\Repositories\SubjectRepository;
 use App\Repositories\UserRepository;
@@ -47,5 +49,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SubjectRepositoryInterface::class, SubjectRepository::class);
         $this->app->bind(LessonRepositoryInterface::class, LessonRepository::class);
         $this->app->bind(FileRepositoryInterface::class, FileRepository::class);
+        $this->app->bind(MessageRepositoryInterface::class, MessageRepository::class);
     }
 }
