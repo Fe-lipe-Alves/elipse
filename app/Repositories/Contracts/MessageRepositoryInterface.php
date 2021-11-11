@@ -60,4 +60,11 @@ interface MessageRepositoryInterface
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
     public function history(int $receiver_id, int $sender_id, int $offset);
+
+    /**
+     * Dispara o evento de notificar mensagens
+     *
+     * @param $message
+     */
+    public function dispatchEvent($message);
 }

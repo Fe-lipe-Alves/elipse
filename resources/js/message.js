@@ -1,4 +1,5 @@
-var last = 0
+var last = 0,
+    activeUser = null
 
 const
     dateFormat = (stringDate) => {
@@ -59,6 +60,7 @@ const
 
     receiverListItemClick = function () {
         if (!$(this).data('active')) {
+            activeUser = $(this).data('id')
             $('.receiver-list-item').each((index, item) => {
                 $(item).removeClass('bg-primary-500-light shadow-md').addClass('hover:bg-white').data('active', false)
             })
@@ -131,6 +133,9 @@ const
         let form = $('#newMessage'),
             formData = new FormData(form[0])
 
+        $('#text-new-message').val('')
+        $('#files').val('').change()
+
         $.ajax({
             url: form.attr('action'),
             type: 'post',
@@ -151,7 +156,27 @@ const
                 }
             }
         })
+    },
+
+    loadMessage = (message) => {
+    console.log(message)
+
+        if (activeUser !== null && message.sender_id === activeUser) {
+            insertMessage(message, true)
+        } else {
+            $('.receiver-list-item').each((index, item) => {
+                if ($(item).data('id') === message.sender_id) {
+                    const span = $(item).find('.qtNew'),
+                        quantity = (parseInt(span.data('quantity')) ?? 0) + 1
+
+                    span.text(quantity + ' ' + (quantity > 1 ? 'novas' : 'nova'))
+                    span.data('quantity', quantity)
+                }
+            })
+        }
     }
+
+window.addListenersMessage(loadMessage)
 
 $(document).ready(function () {
 

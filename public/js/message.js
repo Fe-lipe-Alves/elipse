@@ -3,7 +3,8 @@ var __webpack_exports__ = {};
 /*!*********************************!*\
   !*** ./resources/js/message.js ***!
   \*********************************/
-var last = 0;
+var last = 0,
+    activeUser = null;
 
 var dateFormat = function dateFormat(stringDate) {
   var date = new Date(stringDate),
@@ -51,6 +52,7 @@ var dateFormat = function dateFormat(stringDate) {
 
 receiverListItemClick = function receiverListItemClick() {
   if (!$(this).data('active')) {
+    activeUser = $(this).data('id');
     $('.receiver-list-item').each(function (index, item) {
       $(item).removeClass('bg-primary-500-light shadow-md').addClass('hover:bg-white').data('active', false);
     });
@@ -105,6 +107,8 @@ receiverListItemClick = function receiverListItemClick() {
 }, sendMessage = function sendMessage() {
   var form = $('#newMessage'),
       formData = new FormData(form[0]);
+  $('#text-new-message').val('');
+  $('#files').val('').change();
   $.ajax({
     url: form.attr('action'),
     type: 'post',
@@ -124,7 +128,25 @@ receiverListItemClick = function receiverListItemClick() {
       }
     }
   });
+}, loadMessage = function loadMessage(message) {
+  console.log(message);
+
+  if (activeUser !== null && message.sender_id === activeUser) {
+    insertMessage(message, true);
+  } else {
+    $('.receiver-list-item').each(function (index, item) {
+      if ($(item).data('id') === message.sender_id) {
+        var _parseInt;
+
+        var span = $(item).find('.qtNew'),
+            quantity = ((_parseInt = parseInt(span.data('quantity'))) !== null && _parseInt !== void 0 ? _parseInt : 0) + 1;
+        span.text(quantity + ' ' + (quantity > 1 ? 'novas' : 'nova'));
+        span.data('quantity', quantity);
+      }
+    });
+  }
 };
+window.addListenersMessage(loadMessage);
 $(document).ready(function () {
   $('.receiver-list-item').on('click', receiverListItemClick);
   $('#text-new-message').on('keyup', function () {

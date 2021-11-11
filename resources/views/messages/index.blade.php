@@ -27,31 +27,14 @@
                         >
                             {{ $recent->name }}
                             <br/>
-                            <small>Aluno</small>
+                            <small>Aluno <span class="qtNew text-red-500 float-right font-bold" data-quantity="0"></span></small>
                         </li>
                     @endforeach
                 </ul>
             </div>
 
             <div class="w-full lg:w-8/12 bg-white shadow-inner overflow-auto flex flex-col" id="messages" style="height: 70vh">
-                <div id="history" class="flex-1 w-full overflow-auto py-4 hidden">
-
-                    @php($last = null)
-                    @for($i=0; $i<50; $i++)
-                        @php($send = rand(0,1) == 1)
-                        <div class="w-full flex flex-col @if($send) items-end @endif">
-                            <div class="w-8/12 px-4 py-2 ml-1 mr-2  rounded-lg shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150
-                                    @if($send) bg-white @else bg-primary-500-light @endif
-                                    @if($last == $send) mt-1 @else mt-3 @endif
-                                ">
-                                <p class="text-sm"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem, delectus doloribus excepturi id nobis perspiciatis veniam! Et hic quidem sapiente?</p>
-                                <small class="text-xxs @if($send) float-right @endif">25/10/2021 08:25:30</small>
-                            </div>
-                        </div>
-                        @php($last = $send)
-                    @endfor
-
-                </div>
+                <div id="history" class="flex-1 w-full overflow-auto py-4 hidden"></div>
                 <div id="emptyHistory" class="flex-1 w-full overflow-auto py-4 items-center flex flex-col text-center justify-center">
                     <p class="text-sm text-blueGray-500">Selecione um contato para conversar</p>
                 </div>

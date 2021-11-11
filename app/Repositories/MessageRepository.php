@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Events\Chat\SendMessage;
 use App\Models\Message;
 use App\Models\User;
 use App\Repositories\Contracts\FileRepositoryInterface;
@@ -10,6 +11,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\FileBag;
 
@@ -40,6 +42,8 @@ class MessageRepository implements MessageRepositoryInterface
             if (!is_array($messages)) {
                 $messages = [$messages];
             }
+
+            $this->dispatchEvent($messages);
 
             return [
                 'success' => true,
@@ -89,7 +93,7 @@ class MessageRepository implements MessageRepositoryInterface
         }
 
         $messages = [];
-        foreach ($files as $file) {
+        foreach ($files['files'] as $file) {
             $message = new Message([
                 'receiver_id' => $receiver_id,
                 'sender_id' => $sender_id,
@@ -201,5 +205,21 @@ class MessageRepository implements MessageRepositoryInterface
             'success' => true,
             'messages' => $messages,
         ];
+    }
+
+    /**
+     * Dispara o evento de notificar mensagens
+     *
+     * @param $message
+     */
+    public function dispatchEvent($message)
+    {
+        if (is_array($message)) {
+            foreach ($message as $item) {
+                $this->dispatchEvent($item);
+            }
+        } elseif ($message instanceof Message) {
+            Event::dispatch(new SendMessage($message));
+        }
     }
 }
