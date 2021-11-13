@@ -29,6 +29,11 @@ Route::resourceVerbs([
 Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('authenticate', [AuthController::class, 'authenticate'])->name('authenticate');
+Route::view('resetar_senha', 'auth.reset_password_email')->name('reset_password.email');
+Route::get('resetar_senha/token', [AuthController::class, 'resetPasswordReturn'])->name('reset_password.return');
+//Route::post('resetar_senha', [AuthController::class, 'resetPassword'])->name('reset_password.save');
+Route::post('resetar_senha', [AuthController::class, 'resetPasswordSendEmail'])->name('reset_password.send_email');
+Route::post('resetar_senha/save', [AuthController::class, 'resetPasswordSave'])->name('reset_password.save');
 
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
@@ -76,4 +81,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         ->name('messages.history');
 
 });
-//Route::get('checkName', [StudentsClassController::class, 'checkName'])->name('checkName');
+
+Route::view('ajuda', 'help.index')->name('help');
+Route::view('ajuda/usuarios', 'help.users')->name('help.users');
+Route::view('ajuda/disciplinas', 'help.subjects')->name('help.subjects');
+Route::view('ajuda/aulas', 'help.lessons')->name('help.lessons');
+Route::view('ajuda/turmas', 'help.students_class')->name('help.students_class');
+Route::view('ajuda/trabalhos', 'help.works')->name('help.works');

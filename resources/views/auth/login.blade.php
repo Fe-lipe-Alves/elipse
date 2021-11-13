@@ -50,6 +50,13 @@
                                             style="transition: all 0.15s ease 0s;"
                                         />
                                     </div>
+                                    <div class="flex flex-wrap items-end">
+                                        <div class="w-full text-right">
+                                            <a href="{{ route('reset_password.email') }}" class="text-gray-800"
+                                            ><small>Esqueceu a senha?</small></a
+                                            >
+                                        </div>
+                                    </div>
                                     <div>
                                         <label class="inline-flex items-center cursor-pointer"
                                         ><input
@@ -74,13 +81,6 @@
                                         </button>
                                     </div>
                                 </form>
-                            </div>
-                        </div>
-                        <div class="flex flex-wrap mt-6">
-                            <div class="w-1/2">
-                                <a href="" class="text-gray-300"
-                                ><small>Esqueceu a senha?</small></a
-                                >
                             </div>
                         </div>
                     </div>
