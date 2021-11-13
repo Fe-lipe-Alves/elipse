@@ -16,31 +16,18 @@
 
                                 <div class="w-full">
                                     <h1 class="text-center text-3xl mb-5">Elipse</h1>
-                                    @error('email')
+                                    @error('password')
                                     <p class="text-red-600 mb-3 text-center text-sm">{{ $message }}</p>
                                     @enderror
                                 </div>
-                                <form action="{{ route('authenticate') }}" method="post">
+                                <form action="{{ route('reset_password.save') }}" method="post">
                                     @csrf
-                                    <div class="relative w-full mb-3">
-                                        <label
-                                            class="block uppercase text-gray-700 text-xs font-bold mb-2"
-                                            for="email"
-                                        >Email</label
-                                        ><input
-                                            type="email"
-                                            name="email"
-                                            id="email"
-                                            class="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full"
-                                            placeholder="Email"
-                                            style="transition: all 0.15s ease 0s;"
-                                        />
-                                    </div>
+                                    <input type="hidden" name="token" value="{{ $token }}">
                                     <div class="relative w-full mb-3">
                                         <label
                                             class="block uppercase text-gray-700 text-xs font-bold mb-2"
                                             for="password"
-                                        >Password</label
+                                        >Senha</label
                                         ><input
                                             type="password"
                                             name="password"
@@ -50,26 +37,19 @@
                                             style="transition: all 0.15s ease 0s;"
                                         />
                                     </div>
-                                    <div class="flex flex-wrap items-end">
-                                        <div class="w-full text-right">
-                                            <a href="{{ route('reset_password.email') }}" class="text-gray-800"
-                                            ><small>Esqueceu a senha?</small></a
-                                            >
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label class="inline-flex items-center cursor-pointer"
+                                    <div class="relative w-full mb-3">
+                                        <label
+                                            class="block uppercase text-gray-700 text-xs font-bold mb-2"
+                                            for="password_confirmation"
+                                        >Senha</label
                                         ><input
-                                                id="customCheckLogin"
-                                                name="remember_me"
-                                                value="1"
-                                                type="checkbox"
-                                                class="form-checkbox border-0 rounded text-gray-800 ml-1 w-5 h-5"
-                                                style="transition: all 0.15s ease 0s;"
-                                            /><span class="ml-2 text-sm font-semibold text-gray-700"
-                                            >Lembrar-me</span
-                                            ></label
-                                        >
+                                            type="password"
+                                            name="password_confirmation"
+                                            id="password_confirmation"
+                                            class="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full"
+                                            placeholder="Confirmação de senha"
+                                            style="transition: all 0.15s ease 0s;"
+                                        />
                                     </div>
                                     <div class="text-center mt-6">
                                         <button
@@ -77,7 +57,7 @@
                                             type="submit"
                                             style="transition: all 0.15s ease 0s;"
                                         >
-                                            Entrar
+                                            Recuperar senha
                                         </button>
                                     </div>
                                 </form>

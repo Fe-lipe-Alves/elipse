@@ -20,7 +20,7 @@
                                     <p class="text-red-600 mb-3 text-center text-sm">{{ $message }}</p>
                                     @enderror
                                 </div>
-                                <form action="{{ route('authenticate') }}" method="post">
+                                <form action="{{ route('reset_password.send_email') }}" method="post">
                                     @csrf
                                     <div class="relative w-full mb-3">
                                         <label
@@ -36,40 +36,12 @@
                                             style="transition: all 0.15s ease 0s;"
                                         />
                                     </div>
-                                    <div class="relative w-full mb-3">
-                                        <label
-                                            class="block uppercase text-gray-700 text-xs font-bold mb-2"
-                                            for="password"
-                                        >Password</label
-                                        ><input
-                                            type="password"
-                                            name="password"
-                                            id="password"
-                                            class="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full"
-                                            placeholder="Senha"
-                                            style="transition: all 0.15s ease 0s;"
-                                        />
-                                    </div>
                                     <div class="flex flex-wrap items-end">
                                         <div class="w-full text-right">
-                                            <a href="{{ route('reset_password.email') }}" class="text-gray-800"
-                                            ><small>Esqueceu a senha?</small></a
+                                            <a href="{{ route('login') }}" class="text-gray-800"
+                                            ><small>Lembrou a senha?</small></a
                                             >
                                         </div>
-                                    </div>
-                                    <div>
-                                        <label class="inline-flex items-center cursor-pointer"
-                                        ><input
-                                                id="customCheckLogin"
-                                                name="remember_me"
-                                                value="1"
-                                                type="checkbox"
-                                                class="form-checkbox border-0 rounded text-gray-800 ml-1 w-5 h-5"
-                                                style="transition: all 0.15s ease 0s;"
-                                            /><span class="ml-2 text-sm font-semibold text-gray-700"
-                                            >Lembrar-me</span
-                                            ></label
-                                        >
                                     </div>
                                     <div class="text-center mt-6">
                                         <button
@@ -77,7 +49,7 @@
                                             type="submit"
                                             style="transition: all 0.15s ease 0s;"
                                         >
-                                            Entrar
+                                            Recuperar senha
                                         </button>
                                     </div>
                                 </form>

@@ -3,22 +3,6 @@
         <span class="text-white text-sm uppercase hidden lg:inline-block font-semibold">
             Olá, {{ auth()->user()->name }}
         </span>
-        {{--
-        <form
-            class="md:flex hidden flex-row flex-wrap items-center lg:ml-auto mr-3"
-        >
-            <div class="relative flex w-full flex-wrap items-stretch">
-                <span
-                    class="z-10 h-full leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3"
-                ><i class="fas fa-search"></i
-                    ></span>
-                <input
-                    type="text"
-                    placeholder="Search here..."
-                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
-                />
-            </div>
-        </form>--}}
 
         <ul class="flex-col md:flex-row list-none items-center hidden md:flex">
             <li class="inline-block relative mx-3">
@@ -30,31 +14,6 @@
                 >
                     <i class="fas fa-envelope"></i>
                 </a>
-                <div
-                    class="hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1"
-                    style="min-width: 12rem;"
-                    id="notification-dropdown"
-                >
-                    <a
-                        href="#"
-                        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-                    >Action</a
-                    ><a
-                        href="#"
-                        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-                    >Another action</a
-                    ><a
-                        href="#"
-                        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-                    >Something else here</a
-                    >
-                    <div class="h-0 my-2 border border-solid border-blueGray-100"></div>
-                    <a
-                        href="#"
-                        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-                    >Seprated link</a
-                    >
-                </div>
             </li>
             <li>
                 <a class="text-blueGray-500 block" href="#" id="userHeaderButton" data-hundle="dropdown" data-for="userHeaderBox">
@@ -65,26 +24,31 @@
                     </div>
                 </a>
             </li>
-
+            <li class="inline-block relative mx-3">
+                <a
+                    class="text-white block py-1 px-3"
+                    title="Opções"
+                    href="#"
+                    id="optionsHeaderButton"
+                    data-hundle="dropdown"
+                    data-for="optionsHeaderBox"
+                >
+                    <i class="fas fa-ellipsis-v"></i>
+                </a>
+            </li>
             <div
                 class="hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1"
                 style="min-width: 12rem;"
                 id="userHeaderBox"
                 data-interaction="dropdown"
             >
-                <a
-                    href="#"
-                    class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-                >
-                    Meu perfil
-                </a>
-                <a
-                    href="#"
-                    class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-                >
-                    Notificações
-                </a>
-                <div class="h-0 my-2 border border-solid border-blueGray-100"></div>
+{{--                <a--}}
+{{--                    href="#"--}}
+{{--                    class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"--}}
+{{--                >--}}
+{{--                    Meu perfil--}}
+{{--                </a>--}}
+{{--                <div class="h-0 my-2 border border-solid border-blueGray-100"></div>--}}
                 <a
                     href="#"
                     class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
@@ -92,6 +56,25 @@
                 >
                     Sair
                     <x-form.form action="{{ route('logout') }}" class="hidden" id="formLogout"/>
+                </a>
+            </div>
+            <div
+                class="hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1"
+                style="min-width: 12rem;"
+                id="optionsHeaderBox"
+                data-interaction="dropdown"
+            >
+                <a
+                    href="{{ route('help') }}"
+                    class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
+                >
+                    Ajuda
+                </a>
+                <a
+                    href="#"
+                    class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
+                >
+                    Feedback
                 </a>
             </div>
         </ul>
