@@ -83,3 +83,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 });
 
 Route::view('ajuda', 'help.index')->name('help');
+Route::view('ajuda/usuarios', 'help.users')->name('help.users');
+Route::view('ajuda/disciplinas', 'help.subjects')->name('help.subjects');
+Route::view('ajuda/aulas', 'help.lessons')->name('help.lessons');
+Route::view('ajuda/turmas', 'help.students_class')->name('help.students_class');
+Route::view('ajuda/trabalhos', 'help.works')->name('help.works');

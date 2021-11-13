@@ -15,12 +15,9 @@
 
 <div id="root">
 
-    <x-layout.sidebar />
+    <x-layout.sidebar-help />
 
     <div class="relative md:ml-64 bg-blueGray-50">
-{{--        <x-layout.header />--}}
-
-        <div class="spacer-top py-10"></div>
 
         <div class="p-10">
             {{ $slot }}
