@@ -38,8 +38,6 @@ Route::post('resetar_senha/save', [AuthController::class, 'resetPasswordSave'])-
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
-    Route::get('dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
-
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
     Route::resource('usuarios', UserController::class)
