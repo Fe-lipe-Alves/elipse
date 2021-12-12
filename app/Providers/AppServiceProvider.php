@@ -20,6 +20,7 @@ use App\Repositories\StudentsClassRepository;
 use App\Repositories\SubjectRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\WorkRepository;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -41,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Schema::defaultStringLength(191);
         $this->app->bind(StudentsClassInterface::class, StudentsClassRepository::class);
         $this->app->bind(GradeRepositoryInterface::class, GradeRepository::class);
         $this->app->bind(GradeTypeRepositoryInterface::class, GradeTypeRepository::class);

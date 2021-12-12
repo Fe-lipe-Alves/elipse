@@ -19,8 +19,8 @@ class CreateLogsTable extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->string('model_type');
             $table->string('model_id');
-            $table->json('before');
-            $table->json('after');
+            $table->text('before');
+            $table->text('after');
             $table->dateTime('created_at');
         });
     }

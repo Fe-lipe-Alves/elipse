@@ -1,18 +1,1 @@
-/******/ (() => { // webpackBootstrap
-var __webpack_exports__ = {};
-/*!********************************!*\
-  !*** ./resources/js/lesson.js ***!
-  \********************************/
-$(document).ready(function () {
-  $('.class_schedule-item').on('click', function () {
-    var selected = $(this).data('selected');
-
-    if (selected) {
-      $(this).removeClass('bg-indigo-300 hover:bg-indigo-200').addClass('hover:bg-indigo-100').data('selected', !selected).find('input').prop('checked', !selected);
-    } else {
-      $(this).addClass('bg-indigo-300 hover:bg-indigo-200').removeClass('hover:bg-indigo-100').data('selected', !selected).find('input').prop('checked', !selected);
-    }
-  });
-});
-/******/ })()
-;
+$(document).ready((function(){$(".class_schedule-item").on("click",(function(){var e=$(this).data("selected");e?$(this).removeClass("bg-indigo-300 hover:bg-indigo-200").addClass("hover:bg-indigo-100").data("selected",!e).find("input").prop("checked",!e):$(this).addClass("bg-indigo-300 hover:bg-indigo-200").removeClass("hover:bg-indigo-100").data("selected",!e).find("input").prop("checked",!e)}))}));
