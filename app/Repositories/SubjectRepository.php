@@ -20,7 +20,7 @@ class SubjectRepository implements Contracts\SubjectRepositoryInterface
      */
     public function getAll()
     {
-        return Subject::all();
+        return Subject::query()->orderBy('description')->get();
     }
 
     /**

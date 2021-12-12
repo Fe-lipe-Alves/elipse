@@ -93,10 +93,10 @@ class UserRepository implements UserRepositoryInterface
                 'phone'           => ['required'],
                 'type_of_user_id' => ['required', Rule::in([1, 2, 3, 4])],
                 'ra'              => [
-                    Rule::requiredIf($input['type_of_user_id'] == 1)
+                    Rule::requiredIf($input['type_of_user_id'] == 2)
                 ],
                 'cpf'             => [
-                    Rule::requiredIf($input['type_of_user_id'] != 1)
+                    Rule::requiredIf($input['type_of_user_id'] != 2)
                 ],
             ],
             [

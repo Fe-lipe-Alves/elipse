@@ -121,8 +121,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        dd($user);
-
         if (Auth::user()->type_of_user_id !== 1 && Auth::user()->type_of_user_id !== 4) {
             abort(403);
         }
