@@ -151,6 +151,7 @@ class MessageRepository implements MessageRepositoryInterface
     public function recent(int $user_id)
     {
         return User::query()
+            ->with('typeOfUser')
             ->where('id', '!=', $user_id)
             ->whereIn('id', function(Builder $query) use ($user_id) {
                 $query->select('messages.receiver_id')

@@ -29,7 +29,7 @@
                             >
                                 {{ $recent->name }}
                                 <br/>
-                                <small>Aluno <span class="qtNew text-red-500 float-right font-bold" data-quantity="0"></span></small>
+                                <small>{{ $recent->typeOfUser->description }} <span class="qtNew text-red-500 float-right font-bold" data-quantity="0"></span></small>
                             </li>
                         @endforeach
                     </ul>
