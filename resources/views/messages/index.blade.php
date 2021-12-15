@@ -18,16 +18,33 @@
 
         <div class="flex flex-wrap">
             <div class="w-full lg:w-4/12 bg-white border-r overflow-auto" id="list" style="height: 70vh">
+                @if($recents->count() > 0)
+                    <p class="my-2 text-xs text-gray-300 text-center">Recentes</p>
+                    <ul>
+                        @foreach($recents as $recent)
+                            <li
+                                class="receiver-list-item text-blueGray-500 border-t-0 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap px-4 py-2 hover:shadow hover:bg-white ease-linear transition-all duration-100"
+                                data-id="{{ $recent->id }}"
+                                data-route="{{ route('messages.history', ['receiver_id' => $recent->id]) }}"
+                            >
+                                {{ $recent->name }}
+                                <br/>
+                                <small>Aluno <span class="qtNew text-red-500 float-right font-bold" data-quantity="0"></span></small>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+                <p class="my-2 text-xs text-gray-300 text-center">Todos</p>
                 <ul>
-                    @foreach($recents as $recent)
+                    @foreach($users as $user)
                         <li
                             class="receiver-list-item text-blueGray-500 border-t-0 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap px-4 py-2 hover:shadow hover:bg-white ease-linear transition-all duration-100"
-                            data-id="{{ $recent->id }}"
-                            data-route="{{ route('messages.history', ['receiver_id' => $recent->id]) }}"
+                            data-id="{{ $user->id }}"
+                            data-route="{{ route('messages.history', ['receiver_id' => $user->id]) }}"
                         >
-                            {{ $recent->name }}
+                            {{ $user->name }}
                             <br/>
-                            <small>Aluno <span class="qtNew text-red-500 float-right font-bold" data-quantity="0"></span></small>
+                            <small>{{ $user->typeOfUser->description }} <span class="qtNew text-red-500 float-right font-bold" data-quantity="0"></span></small>
                         </li>
                     @endforeach
                 </ul>

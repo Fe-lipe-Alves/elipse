@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Repositories\Contracts\MessageRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,12 @@ class MessageController extends Controller
     public function index()
     {
         $recents = $this->repository->recent(Auth::id());
-        return view('messages.index', compact('recents'));
+        $users = User::query()
+            ->with('typeOfUser')
+            ->where('id', '!=', Auth::id())
+            ->orderBy('name')
+            ->get();
+        return view('messages.index', compact('recents', 'users'));
     }
 
     public function new()
