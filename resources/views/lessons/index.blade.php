@@ -44,9 +44,14 @@
                 </thead>
                 <tbody>
                 @foreach($lessons as $lesson)
+                    @php
+                        if (empty($lesson->studentsClass)) {
+                            continue;
+                        }
+                    @endphp
                     <tr>
                         <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                            {{ $lesson->studentsClass->description }}
+                            {{ $lesson->studentsClass->name }}
                         </td>
                         <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                             {{ $lesson->subject->description }}

@@ -50,7 +50,14 @@ class LessonController extends Controller
         $subjectRepository = app(SubjectRepositoryInterface::class);
         $subjects = $subjectRepository->getAll();
 
-        return view('lessons.form', compact('teachers', 'studentsClasses', 'subjects'));
+        $busySchedule = [];
+
+        return view('lessons.form', compact(
+            'teachers',
+            'studentsClasses',
+            'subjects',
+            'busySchedule')
+        );
     }
 
     /**

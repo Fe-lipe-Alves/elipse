@@ -168,6 +168,8 @@ class StudentsClassController extends Controller
             abort(403);
         }
 
+        $studentsClass->students()->detach();
+
         $studentsClass->delete();
         return redirect()->route('students_class.index');
     }
