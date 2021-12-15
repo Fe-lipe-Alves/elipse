@@ -10,6 +10,7 @@ use App\Repositories\Contracts\SubjectRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Support\Consts\TypeOfUsers;
 use Illuminate\Auth\Events\Validated;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -64,7 +65,7 @@ class StudentsClassController extends Controller
             ];
         });
 
-        $students = $userRepository->getActiveUser(TypeOfUsers::STUDENT);
+        $students = $this->repository->getStudentsWithoutClass();
         $teachers = $userRepository->getActiveUser(TypeOfUsers::TEACHER);
 
         $subjects= $subjectRepository->getAll();

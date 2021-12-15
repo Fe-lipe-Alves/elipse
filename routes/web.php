@@ -66,6 +66,9 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         ->parameters(['aulas' => 'lesson'])
         ->names('lessons');
 
+    Route::post('aulas/consultar-horario', [LessonController::class, 'consultSchedule'])
+        ->name('lessons.consult_schedule');
+
     Route::get('mensagens', [MessageController::class, 'index'])
         ->name('messages.index');
 

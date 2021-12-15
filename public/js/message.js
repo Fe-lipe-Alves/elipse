@@ -1,1 +1,168 @@
-(()=>{var e=null,t=function(e){var t=new Date(e),s=t.getDate().toString(),n=1===s.length?"0"+s:s,a=(t.getMonth()+1).toString();return n+"/"+(1===a.length?"0"+a:a)+"/"+t.getFullYear()+" "+t.getHours()+":"+t.getMinutes()+":"+t.getSeconds()},s=function(e){var s=arguments.length>1&&void 0!==arguments[1]&&arguments[1],n=$("#receiver_id").val(),a=e.sender_id!==parseInt(n),i="",o=t(e.created_at);if(e.file)if(null!==e.files){var l=["PNG","JPG","JPEG","GIF"];i=l.indexOf(e.files.type.toUpperCase())>-1?'<a href="'+e.files.source+'" target="_blank"><img src="'+e.files.source+'" class="max-w-full" title="'+e.files.name+'" alt="'+e.files.name+'"/></a>':'<a href="'+e.files.source+'"><span>'+e.files.name+"</span></a>"}else i='<p><small class="text-sm text-red-300">Erro ao obter arquivo.</small></p>';else i='<p class="text-sm">'+e.content+"</p>\n";var r='<div class="w-full flex flex-col '+(a?"items-end":"")+'">\n<div class="w-8/12 px-4 py-2 ml-1 mr-2  rounded-lg shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150 '+(a?"bg-white":"bg-primary-500-light")+(0===e.sender_id?" mt-1":"mt-3")+'">\n'+i+'<small class="text-xxs '+(a?"float-right":"")+'">'+o+"</small>\n</div>\n</div>";s?$("#history").append(r):$("#history").prepend(r)};receiverListItemClick=function(){$(this).data("active")||(e=$(this).data("id"),$(".receiver-list-item").each((function(e,t){$(t).removeClass("bg-primary-500-light shadow-md").addClass("hover:bg-white").data("active",!1)})),$(this).addClass("bg-primary-500-light shadow-md").removeClass("hover:bg-white").data("active",!0),$("#receiver_id").val($(this).data("id")),$("#history").html(""),showLoadingHistory(),$.get($(this).data("route")).then((function(e){e.success&&(e.messages.forEach((function(e){s(e)})),showHistory())})))},showHistory=function(){$("#newMessage, #history").removeClass("hidden"),$("#emptyHistory, #loadingHistory").addClass("hidden")},showLoadingHistory=function(){$("#newMessage, #history, #emptyHistory").addClass("hidden"),$("#loadingHistory").removeClass("hidden")},checkContent=function(){return""!==$("#text-new-message").val()||$("#files")[0].files.length>0},checkContentSend=function(){checkContent()?$("#btn-send").removeClass("bg-white").addClass("bg-primary-500").prop("disabled",!1):$("#btn-send").addClass("bg-white").removeClass("bg-primary-500").prop("disabled",!0)},changeBoxInputFile=function(){var e=$("#box-files-name"),t=$("#box-input-text"),s=$("#files"),n=s[0].files.length;if($("#text-new-message").val(""),n>0){var a=[];$(s[0].files).each((function(e,t){a.push(t.name)})),a=a.join(", "),t.addClass("hidden"),e.removeClass("hidden"),e.find("#length").text(n),e.find("#files-name").html(a).attr("title",a)}else t.removeClass("hidden"),e.addClass("hidden")},sendMessage=function(){var e=$("#newMessage"),t=new FormData(e[0]);$("#text-new-message").val(""),$("#files").val("").change(),$.ajax({url:e.attr("action"),type:"post",data:t,async:!1,cache:!1,contentType:!1,enctype:"multipart/form-data",processData:!1,dataType:"json",success:function(e){e.success&&(e.messages.forEach((function(e){s(e,!0)})),showHistory())}})},loadMessage=function(t){console.log(t),null!==e&&t.sender_id===e?s(t,!0):$(".receiver-list-item").each((function(e,s){if($(s).data("id")===t.sender_id){var n,a=$(s).find(".qtNew"),i=(null!==(n=parseInt(a.data("quantity")))&&void 0!==n?n:0)+1;a.text(i+" "+(i>1?"novas":"nova")),a.data("quantity",i)}}))},window.addListenersMessage(loadMessage),$(document).ready((function(){$(".receiver-list-item").on("click",receiverListItemClick),$("#text-new-message").on("keyup",(function(){checkContentSend()})),$("#btn-file").on("click",(function(){$("#files").click()})),$("#files").on("change",(function(){changeBoxInputFile(),checkContentSend()})),$("#newMessage").on("submit",(function(e){e.preventDefault(),sendMessage()}))}))})();
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!*********************************!*\
+  !*** ./resources/js/message.js ***!
+  \*********************************/
+var last = 0,
+    activeUser = null;
+
+var dateFormat = function dateFormat(stringDate) {
+  var date = new Date(stringDate),
+      day = date.getDate().toString(),
+      dayF = day.length === 1 ? '0' + day : day,
+      month = (date.getMonth() + 1).toString(),
+      monthF = month.length === 1 ? '0' + month : month,
+      yearF = date.getFullYear(),
+      hour = date.getHours(),
+      minutes = date.getMinutes(),
+      seconds = date.getSeconds();
+  return dayF + "/" + monthF + "/" + yearF + " " + hour + ":" + minutes + ":" + seconds;
+},
+    insertMessage = function insertMessage(message) {
+  var end = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  var receiver_id = $('#receiver_id').val(),
+      send = message.sender_id !== parseInt(receiver_id),
+      content = '',
+      created_at = dateFormat(message.created_at);
+
+  if (message.file) {
+    if (message.files !== null) {
+      var images = ['PNG', 'JPG', 'JPEG', 'GIF'];
+
+      if (images.indexOf(message.files.type.toUpperCase()) > -1) {
+        content = '<a href="' + message.files.source + '" target="_blank">' + '<img src="' + message.files.source + '" class="max-w-full" title="' + message.files.name + '" alt="' + message.files.name + '"/>' + '</a>';
+      } else {
+        content = '<a href="' + message.files.source + '">' + '<span>' + message.files.name + '</span>' + '</a>';
+      }
+    } else {
+      content = '<p><small class="text-sm text-red-300">Erro ao obter arquivo.</small></p>';
+    }
+  } else {
+    content = '<p class="text-sm">' + message.content + '</p>\n';
+  }
+
+  var html = '<div class="w-full flex flex-col ' + (send ? 'items-end' : '') + '">\n' + '<div class="w-8/12 px-4 py-2 ml-1 mr-2  rounded-lg shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150 ' + (send ? 'bg-white' : 'bg-primary-500-light') + (last === message.sender_id ? ' mt-1' : 'mt-3') + '">\n' + content + '<small class="text-xxs ' + (send ? 'float-right' : '') + '">' + created_at + '</small>\n' + '</div>\n' + '</div>';
+
+  if (end) {
+    $('#history').append(html);
+  } else {
+    $('#history').prepend(html);
+  }
+};
+
+receiverListItemClick = function receiverListItemClick() {
+  if (!$(this).data('active')) {
+    activeUser = $(this).data('id');
+    $('.receiver-list-item').each(function (index, item) {
+      $(item).removeClass('bg-primary-500-light shadow-md').addClass('hover:bg-white').data('active', false);
+    });
+    $(this).addClass('bg-primary-500-light shadow-md').removeClass('hover:bg-white').data('active', true);
+    $('#receiver_id').val($(this).data('id'));
+    $('#history').html('');
+    showLoadingHistory();
+    $.get($(this).data('route')).then(function (response) {
+      if (response.success) {
+        response.messages.forEach(function (message) {
+          insertMessage(message);
+        });
+        showHistory();
+      }
+    });
+  }
+}, showHistory = function showHistory() {
+  $('#newMessage, #history').removeClass('hidden');
+  $('#emptyHistory, #loadingHistory').addClass('hidden');
+}, showLoadingHistory = function showLoadingHistory() {
+  $('#newMessage, #history, #emptyHistory').addClass('hidden');
+  $('#loadingHistory').removeClass('hidden');
+}, checkContent = function checkContent() {
+  return $('#text-new-message').val() !== '' || $('#files')[0].files.length > 0;
+}, checkContentSend = function checkContentSend() {
+  if (checkContent()) {
+    $('#btn-send').removeClass('bg-white').addClass('bg-primary-500').prop('disabled', false);
+  } else {
+    $('#btn-send').addClass('bg-white').removeClass('bg-primary-500').prop('disabled', true);
+  }
+}, changeBoxInputFile = function changeBoxInputFile() {
+  var boxFile = $('#box-files-name'),
+      boxInput = $('#box-input-text'),
+      inputFiles = $('#files'),
+      countFiles = inputFiles[0].files.length;
+  $('#text-new-message').val('');
+
+  if (countFiles > 0) {
+    var names = [];
+    $(inputFiles[0].files).each(function (index, item) {
+      names.push(item.name);
+    });
+    names = names.join(', ');
+    boxInput.addClass('hidden');
+    boxFile.removeClass('hidden');
+    boxFile.find('#length').text(countFiles);
+    boxFile.find('#files-name').html(names).attr('title', names);
+  } else {
+    boxInput.removeClass('hidden');
+    boxFile.addClass('hidden');
+  }
+}, sendMessage = function sendMessage() {
+  var form = $('#newMessage'),
+      formData = new FormData(form[0]);
+  $('#text-new-message').val('');
+  $('#files').val('').change();
+  $.ajax({
+    url: form.attr('action'),
+    type: 'post',
+    data: formData,
+    async: false,
+    cache: false,
+    contentType: false,
+    enctype: 'multipart/form-data',
+    processData: false,
+    dataType: 'json',
+    success: function success(response) {
+      if (response.success) {
+        response.messages.forEach(function (message) {
+          insertMessage(message, true);
+        });
+        showHistory();
+      }
+    }
+  });
+}, loadMessage = function loadMessage(message) {
+  console.log(message);
+
+  if (activeUser !== null && message.sender_id === activeUser) {
+    insertMessage(message, true);
+  } else {
+    $('.receiver-list-item').each(function (index, item) {
+      if ($(item).data('id') === message.sender_id) {
+        var _parseInt;
+
+        var span = $(item).find('.qtNew'),
+            quantity = ((_parseInt = parseInt(span.data('quantity'))) !== null && _parseInt !== void 0 ? _parseInt : 0) + 1;
+        span.text(quantity + ' ' + (quantity > 1 ? 'novas' : 'nova'));
+        span.data('quantity', quantity);
+      }
+    });
+  }
+};
+window.addListenersMessage(loadMessage);
+$(document).ready(function () {
+  $('.receiver-list-item').on('click', receiverListItemClick);
+  $('#text-new-message').on('keyup', function () {
+    checkContentSend();
+  });
+  $('#btn-file').on('click', function () {
+    $('#files').click();
+  });
+  $('#files').on('change', function () {
+    changeBoxInputFile();
+    checkContentSend();
+  });
+  $('#newMessage').on('submit', function (event) {
+    event.preventDefault();
+    sendMessage();
+  });
+});
+/******/ })()
+;

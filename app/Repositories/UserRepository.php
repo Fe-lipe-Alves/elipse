@@ -133,12 +133,16 @@ class UserRepository implements UserRepositoryInterface
      * @param null $type_of_users
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function getActiveUser($type_of_users = null)
+    public function getActiveUser($type_of_users = null, \Closure $closure = null)
     {
         $users = User::query();
 
         if ($type_of_users) {
             $users->where('type_of_user_id', $type_of_users);
+        }
+
+        if ($closure) {
+            $closure($users);
         }
 
         return $users->get();

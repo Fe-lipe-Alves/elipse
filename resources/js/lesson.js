@@ -18,4 +18,29 @@ $(document).ready(function() {
         }
     })
 
+    $('#optionsSelect select').on('change', function() {
+        const teacher = $('#teacher_id').val(),
+              students_class = $('#students_class_id').val()
+
+        if  (teacher !== null && students_class !== null) {
+
+            $.ajax({
+                url: routeConsultHours,
+                type: 'post',
+                data: {
+                    teacher_id: teacher,
+                    students_class_id: students_class
+                },
+                dataType: 'json',
+                success: function (response) {
+                    if (Array.isArray(response)) {
+                        response.forEach((item, index) => {
+                            $('input[value="'+item+'"]').parent().addClass('bg-gray-100 hover:bg-gray-100')
+                        })
+                    }
+                }
+            })
+
+        }
+    })
 })

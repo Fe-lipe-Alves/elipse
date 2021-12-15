@@ -5,11 +5,14 @@ namespace App\Repositories;
 
 
 use App\Models\StudentsClass;
+use App\Models\User;
 use App\Repositories\Contracts\StudentsClassInterface;
 use App\Support\Consts\GradeTypes;
+use App\Support\Consts\TypeOfUsers;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 
 class StudentsClassRepository implements StudentsClassInterface
@@ -92,5 +95,16 @@ class StudentsClassRepository implements StudentsClassInterface
         return $studentsClass->grade->year .
             ($studentsClass->grade->grade_type_id == GradeTypes::ELEMENTARY ? 'º ano' : 'ª série') . ' ' .
             $studentsClass->name;
+    }
+
+    public function getStudentsWithoutClass()
+    {
+        return User::query()
+            ->whereNotIn('id', function (Builder $query) {
+                $query->select('student_id')
+                      ->from('student_students_class');
+            })
+            ->where('type_of_user_id', TypeOfUsers::STUDENT)
+            ->get();
     }
 }

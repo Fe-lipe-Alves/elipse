@@ -103,12 +103,15 @@ class LessonController extends Controller
         $schedules = $lesson->schedules()->select('value')->get()->toArray();
         $schedules = Arr::flatten($schedules);
 
+        $busySchedule = $this->repository->getScheduleAvailable($lesson->toArray());
+
         return view('lessons.form', compact(
             'teachers',
             'studentsClasses',
             'subjects',
             'lesson',
-            'schedules'
+            'schedules',
+            'busySchedule',
         ));
     }
 
@@ -140,5 +143,18 @@ class LessonController extends Controller
         $this->repository->destroy($lesson);
 
         return redirect()->route('lessons.index');
+    }
+
+    /**
+     * Obtém o cronograma disponível para a turma e professor informados
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function consultSchedule(Request $request)
+    {
+        $response = $this->repository->getScheduleAvailable($request->all());
+
+        return response()->json($response);
     }
 }

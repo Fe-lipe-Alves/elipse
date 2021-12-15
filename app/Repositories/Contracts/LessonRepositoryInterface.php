@@ -30,4 +30,36 @@ interface LessonRepositoryInterface
      * @return \Illuminate\Contracts\Validation\Validator
      */
     public function validate(array $data, Lesson $lesson = null);
+
+    /**
+     * Atualiza o cronograma
+     *
+     * @param array $schedules
+     * @param Lesson $lesson
+     */
+    public function updateSchedule(array $schedules, Lesson $lesson);
+
+    /**
+     * Deleta um registro de aula
+     *
+     * @param Lesson $lesson
+     * @return array
+     */
+    public function destroy(Lesson $lesson);
+
+    /**
+     * Obtém toddas as aulas de um professor
+     *
+     * @param $teacher_id
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getAllByTeacher($teacher_id);
+
+    /**
+     * Obtém um vetor com o cronograma ocupado para o professor e aluno selecionado
+     *
+     * @param array $data
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getScheduleAvailable(array $data);
 }

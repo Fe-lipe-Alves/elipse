@@ -36,6 +36,14 @@ function closeDropdown(event, element) {
 }
 
 $(document).ready(function () {
+    $(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    });
+
     $('[data-hundle="dropdown"]').on('click', function (event) {
         event.preventDefault()
         openDropdown(event, $(this).data('for'))

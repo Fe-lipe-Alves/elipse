@@ -80,6 +80,12 @@ class LessonRepository implements LessonRepositoryInterface
         );
     }
 
+    /**
+     * Atualiza o cronograma
+     *
+     * @param array $schedules
+     * @param Lesson $lesson
+     */
     public function updateSchedule(array $schedules, Lesson $lesson)
     {
         $lesson->schedules()->delete();
@@ -90,6 +96,12 @@ class LessonRepository implements LessonRepositoryInterface
         }
     }
 
+    /**
+     * Deleta um registro de aula
+     *
+     * @param Lesson $lesson
+     * @return array
+     */
     public function destroy(Lesson $lesson)
     {
         $lesson->schedules()->delete();
@@ -110,5 +122,27 @@ class LessonRepository implements LessonRepositoryInterface
             ->where('teacher_id', $teacher_id)
             ->with(['subject', 'teacher', 'studentsClass'])
             ->get();
+    }
+
+    /**
+     * Obtém um vetor com o cronograma ocupado para o professor e aluno selecionado
+     *
+     * @param array $data
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getScheduleAvailable(array $data)
+    {
+        return ClassSchedule::query()
+            ->select('class_schedules.value')
+            ->join('lessons', 'class_schedules.lesson_id', '=', 'lessons.id')
+            ->join('students_classes', 'lessons.students_class_id', '=', 'students_classes.id')
+            ->join('users', 'lessons.teacher_id', '=', 'users.id')
+            ->where('students_class_id', $data['students_class_id'])
+            ->orWhere('teacher_id', $data['teacher_id'])
+            ->get()
+            ->transform(function ($item) {
+                return $item->value;
+            })
+            ->toArray();
     }
 }

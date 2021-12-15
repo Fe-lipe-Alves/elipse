@@ -10,11 +10,17 @@
         <x-form.form action="{{ $route }}" :model="$lesson">
             <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">Informações da aula</h6>
 
-            <div class="flex flex-wrap">
+            <div class="flex flex-wrap" id="optionsSelect">
 
-                <x-form.select name="subject_id" :options="$subjects" label="Disciplina" width="w-full lg:w-4/12" />
-                <x-form.select name="teacher_id" :options="$teachers" label="Professor" description="name" width="w-full lg:w-4/12" />
-                <x-form.select name="students_class_id" :options="$studentsClasses" label="Turma" width="w-full lg:w-4/12" />
+                <x-form.select name="subject_id" :options="$subjects" label="Disciplina" width="w-full lg:w-4/12">
+                        <option disabled selected>Selecione</option>
+                </x-form.select>
+                <x-form.select name="teacher_id" :options="$teachers" label="Professor" description="name" width="w-full lg:w-4/12">
+                    <option disabled selected>Selecione</option>
+                </x-form.select>
+                <x-form.select name="students_class_id" :options="$studentsClasses" label="Turma" width="w-full lg:w-4/12">
+                    <option disabled selected>Selecione</option>
+                </x-form.select>
 
             </div>
 
@@ -57,7 +63,7 @@
                                         @php($checked = isset($schedules) ? in_array(($i.'-'.$j), $schedules) : false)
                                         <td
                                             data-selected="false"
-                                            class="class_schedule-item text-center border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 {{ $checked ? 'bg-indigo-300 hover:bg-indigo-200' : 'hover:bg-indigo-100' }}"
+                                            class="class_schedule-item text-center border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 {{ $checked ? 'bg-indigo-300 hover:bg-indigo-200' : (in_array(($i.'-'.$j), $busySchedule) ? 'bg-gray-100 hover:bg-gray-100' : 'hover:bg-indigo-100') }}"
                                         >
                                             <input
                                                 type="checkbox"
@@ -65,6 +71,7 @@
                                                 value="{{ $i.'-'.$j }}"
                                                 style="display: none"
                                                 {{ $checked ? 'checked="checked"' : '' }}
+                                                {{ in_array(($i.'-'.$j), $busySchedule) ? 'disabled' : '' }}
                                             />
                                             {{ $i }}° aula
                                         </td>
@@ -97,6 +104,9 @@
     </x-layout.card-page>
 
 <x-slot name="scripts">
+    <script>
+        const routeConsultHours = '{{ route('lessons.consult_schedule') }}'
+    </script>
     <script src="{{ asset('js/lesson.js') }}"></script>
 </x-slot>
 </x-app>
